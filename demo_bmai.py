@@ -34,7 +34,7 @@ def main(args):
     # TRANSFORMS :
     transforms = prepare_transforms()
     if args.data_name == 'guinee':
-        dataset = bmaiDataset(csv_file='data/full_guinee_data.csv',transform=transforms,use_csv=True)
+        dataset = bmaiDataset(csv_file='/hdd/data/bmai_clean/full_guinee_data.csv',transform=transforms,use_csv=True)
     else:
         dataset = bmaiDataset(csv_file='data/full_cambodge_data.csv',transform=transforms,use_csv=True)
         
