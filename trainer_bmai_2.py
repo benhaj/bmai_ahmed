@@ -189,10 +189,13 @@ class BmaiTrainer:
             
             print(f'for epoch {epoch} , average loss is {epoch_loss}')
             epoch_losses.append(epoch_loss)
+            
+            avg_test_loss = self.test(epoch)
+            
         return np.mean(epoch_losses)
     
     
-    def test(self):
+    def test(self,epoch_num):
         """
         :param epochs: number of iterations over the training dataset to perform.
         :return: None.
@@ -205,65 +208,66 @@ class BmaiTrainer:
         batch_losses = []
         y_true = []
         predictions = []
-        for batch_idx, data in enumerate(self.test_dataloader):
+        with torch.no_grad():
+            for batch_idx, data in enumerate(self.test_dataloader):
 
 
-             ## data in form ['img',sexe','days','height','weight']
+                 ## data in form ['img',sexe','days','height','weight']
 
-            imgs = data[0].to(self.device)
-            target = data[1:][0]
-            num_elems_in_batch = target.shape[0]
-            ## Forward
-            if AGE & SEXE:
-                sexe = target[:,0].reshape((num_elems_in_batch,1)).to(self.device)
-                age = target[:,1].reshape((num_elems_in_batch,1)).to(self.device)
-                target = target[:,2:].to(self.device)
-                if model.name == 'mobilenet_v2':
-                  feat = model.classifier(model.features(imgs))
-                  concat = torch.cat([feat,sexe,age],dim=1).float()
-                  scores = model.last(concat)
+                imgs = data[0].to(self.device)
+                target = data[1:][0]
+                num_elems_in_batch = target.shape[0]
+                ## Forward
+                if AGE & SEXE:
+                    sexe = target[:,0].reshape((num_elems_in_batch,1)).to(self.device)
+                    age = target[:,1].reshape((num_elems_in_batch,1)).to(self.device)
+                    target = target[:,2:].to(self.device)
+                    if model.name == 'mobilenet_v2':
+                      feat = model.classifier(model.features(imgs))
+                      concat = torch.cat([feat,sexe,age],dim=1).float()
+                      scores = model.last(concat)
+                    else:
+                      scores = model(imgs,sexe,age)
+
+                elif AGE:
+                    age = target[:,0].reshape((num_elems_in_batch,1)).to(self.device)
+                    target = target[:,2:].to(self.device)
+                    if model.name == 'mobilenet_v2':
+                      feat = model.classifier(model.features(imgs))
+                      concat = torch.cat([feat,age],dim=1).float()
+                      scores = model.last(concat)
+                    else:  
+                      scores = model(imgs,age)
+
+                elif SEXE:
+                    sexe = target[:,1].reshape((num_elems_in_batch,1)).to(self.device)
+                    target = target[:,2:].to(self.device)
+                    if model.name == 'mobilenet_v2':
+                      feat = model.classifier(model.features(imgs))
+                      concat = torch.cat([feat,sexe],dim=1).float()
+                      scores = model.last(concat)
+                    else:
+                      scores = model(imgs,sexe)
+
                 else:
-                  scores = model(imgs,sexe,age)
-                
-            elif AGE:
-                age = target[:,0].reshape((num_elems_in_batch,1)).to(self.device)
-                target = target[:,2:].to(self.device)
-                if model.name == 'mobilenet_v2':
-                  feat = model.classifier(model.features(imgs))
-                  concat = torch.cat([feat,age],dim=1).float()
-                  scores = model.last(concat)
-                else:  
-                  scores = model(imgs,age)
-                
-            elif SEXE:
-                sexe = target[:,1].reshape((num_elems_in_batch,1)).to(self.device)
-                target = target[:,2:].to(self.device)
-                if model.name == 'mobilenet_v2':
-                  feat = model.classifier(model.features(imgs))
-                  concat = torch.cat([feat,sexe],dim=1).float()
-                  scores = model.last(concat)
-                else:
-                  scores = model(imgs,sexe)
-                
-            else:
-                target = target[:,2:].to(self.device)
-                scores = model(imgs)
-            
-            y_true.append(target.detach().numpy() if self.device=='cpu' else target.cpu().detach().numpy())
-            predictions.append(scores.detach().numpy() if self.device=='cpu' else scores.cpu().detach().numpy())
-            
-            # loss
-            loss = self.loss_fn(scores,target).sum()
-            
-            batch_losses.append(loss.item() if self.device=='cpu' else loss.cpu().item())
-            
+                    target = target[:,2:].to(self.device)
+                    scores = model(imgs)
+
+                y_true.append(target.detach().numpy() if self.device=='cpu' else target.cpu().detach().numpy())
+                predictions.append(scores.detach().numpy() if self.device=='cpu' else scores.cpu().detach().numpy())
+
+                # loss
+                loss = self.loss_fn(scores,target).sum()
+
+                batch_losses.append(loss.item() if self.device=='cpu' else loss.cpu().item())
+
                 
         average_loss = np.mean(batch_losses)
         print(f'Average test loss is {average_loss}')
         
-        wandb.log({"test_loss": average_loss})
+        wandb.log({"epoch":epoch_num,"epoch_test_loss": average_loss})
         
-        y_true= np.vstack(y_true)
-        predictions = np.vstack(predictions)
-
-        return y_true,predictions,average_loss
+#         y_true= np.vstack(y_true)
+#         predictions = np.vstack(predictions)
+        return average_loss
+#         return y_true,predictions,average_loss

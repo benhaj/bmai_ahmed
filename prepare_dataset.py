@@ -60,7 +60,8 @@ class bmaiDataset(Dataset):
         ## ['img',sexe','days','height','weight']
         if self.use_csv:
             img_path = self.annotations.iloc[index, 0]#.values[0]
-            img = io.imread(img_path)
+            new_path = "/hdd/data/" + img_path.replace('data','bmai_clean',1)
+            img = io.imread(new_path)
             
             sexe = self.annotations.iloc[index, 1]
             days = (self.annotations.iloc[index,2] - self.age_mean) / self.age_std

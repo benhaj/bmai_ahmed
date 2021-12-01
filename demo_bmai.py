@@ -36,12 +36,12 @@ def main(args):
     if args.data_name == 'guinee':
         dataset = bmaiDataset(csv_file='/hdd/data/bmai_clean/full_guinee_data.csv',transform=transforms,use_csv=True)
     else:
-        dataset = bmaiDataset(csv_file='data/full_cambodge_data.csv',transform=transforms,use_csv=True)
+        dataset = bmaiDataset(csv_file='/hdd/data/bmai_clean/full_cambodge_data.csv',transform=transforms,use_csv=True)
         
     ## Trainer:
     trainer = BmaiTrainer(model, dataset, AGE=args.AGE, SEXE=args.SEXE, batch_size=32, num_workers=0)
     mean_training_loss = trainer.train(args.epochs)
-    y_true,predictions,average_loss = trainer.test()
+    #y_true,predictions,average_loss = trainer.test()
 
 if __name__ == '__main__':
     ## parser = argparse.ArgumentParser('Demo', parents=[get_args_parser()])
