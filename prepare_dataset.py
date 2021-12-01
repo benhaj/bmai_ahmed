@@ -140,8 +140,9 @@ class Pad(object):
     
 def prepare_transforms(img_mean=IMG_MEAN,img_std=1):
     normalization = transforms.Normalize(IMG_MEAN,1)
-    composed = transforms.Compose([Rescale(HEIGHT_SIZE),
-                               normalization,
+    composed = transforms.Compose([transforms.ToTensor(),
+                                   normalization,
+                                   transforms.Resize((HEIGHT_SIZE,HEIGHT_SIZE)),
                                Pad(stride=8, pad_value=(0, 0, 0))
                               ])
     return composed
