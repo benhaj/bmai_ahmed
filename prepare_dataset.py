@@ -73,7 +73,7 @@ class bmaiDataset(Dataset):
             
 
         if self.transform:
-            img=self.transform(img)
+            img=self.transform(img.copy())
         return img , y_label
 
 ### RESCALE (https://pytorch.org/tutorials/beginner/data_loading_tutorial.html)

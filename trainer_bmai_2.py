@@ -4,7 +4,7 @@ import os
 from torch.utils.data import DataLoader, random_split, Dataset
 import torch.optim as optim
 from torch import nn
-
+import pandas as pd
 import wandb
 
 # start a new experiment
@@ -13,7 +13,7 @@ wandb.init(project="new-sota-model")
 
 
 class BmaiTrainer:
-    def __init__(self, model, dataset, AGE=False, SEXE=False, train_size=0.8, batch_size=32, num_workers=0 ):
+    def __init__(self, model, dataset, AGE=False, SEXE=False, train_size=0.8, lr = 0.005, batch_size=32, num_workers=10 ):
         """
         Initializes the class Kather19Trainer which inherits from the parent class Trainer. The class implements a
         convenient way to log training metrics and train over multiple sessions.
@@ -30,7 +30,7 @@ class BmaiTrainer:
         """
         # Device
         self.device = ('cuda' if torch.cuda.is_available() else 'cpu')
-
+        print(self.device)
         # Model
         if model.name == 'mobilenet_v2':
           # Freeze parameters
@@ -70,6 +70,9 @@ class BmaiTrainer:
             )
 
         self.model = model.to(self.device)
+        
+        # Learning rate
+        self.lr = lr
 
         # Data generators
         self.dataset = dataset
@@ -112,13 +115,15 @@ class BmaiTrainer:
         model = self.model
         model.train()
         ## create optimizer
-        optimizer = optim.Adam(model.parameters(),lr=0.005)
+        optimizer = optim.Adam(model.parameters(),lr=self.lr)
         
         # capture a dictionary of hyperparameters with config
-        wandb.config = {"learning_rate": 0.005, "epochs": epochs, "batch_size": 32}
+        wandb.config = {"learning_rate": self.lr, "epochs": epochs, "batch_size": self.batch_size}
         # optional: track gradients
         wandb.watch(model)
-        
+
+
+        results = pd.DataFrame(columns=['mean_height_rel_error','mean_weight_rel_error'])
         epoch_losses=[]
         for epoch in range(epochs):
 
@@ -190,9 +195,11 @@ class BmaiTrainer:
             print(f'for epoch {epoch} , average loss is {epoch_loss}')
             epoch_losses.append(epoch_loss)
             
-            avg_test_loss = self.test(epoch)
-            
-        return np.mean(epoch_losses)
+            mean_height_rel_error, mean_weight_rel_error, avg_test_loss = self.test(epoch)
+
+            results.loc[epoch] = [mean_height_rel_error,mean_weight_rel_error]
+
+        return results, np.mean(epoch_losses)
     
     
     def test(self,epoch_num):
@@ -208,66 +215,86 @@ class BmaiTrainer:
         batch_losses = []
         y_true = []
         predictions = []
-        with torch.no_grad():
-            for batch_idx, data in enumerate(self.test_dataloader):
+        for batch_idx, data in enumerate(self.test_dataloader):
+                
 
+             ## data in form ['img',sexe','days','height','weight']
 
-                 ## data in form ['img',sexe','days','height','weight']
-
-                imgs = data[0].to(self.device)
-                target = data[1:][0]
-                num_elems_in_batch = target.shape[0]
-                ## Forward
-                if AGE & SEXE:
-                    sexe = target[:,0].reshape((num_elems_in_batch,1)).to(self.device)
-                    age = target[:,1].reshape((num_elems_in_batch,1)).to(self.device)
-                    target = target[:,2:].to(self.device)
-                    if model.name == 'mobilenet_v2':
-                      feat = model.classifier(model.features(imgs))
-                      concat = torch.cat([feat,sexe,age],dim=1).float()
-                      scores = model.last(concat)
-                    else:
-                      scores = model(imgs,sexe,age)
-
-                elif AGE:
-                    age = target[:,0].reshape((num_elems_in_batch,1)).to(self.device)
-                    target = target[:,2:].to(self.device)
-                    if model.name == 'mobilenet_v2':
-                      feat = model.classifier(model.features(imgs))
-                      concat = torch.cat([feat,age],dim=1).float()
-                      scores = model.last(concat)
-                    else:  
-                      scores = model(imgs,age)
-
-                elif SEXE:
-                    sexe = target[:,1].reshape((num_elems_in_batch,1)).to(self.device)
-                    target = target[:,2:].to(self.device)
-                    if model.name == 'mobilenet_v2':
-                      feat = model.classifier(model.features(imgs))
-                      concat = torch.cat([feat,sexe],dim=1).float()
-                      scores = model.last(concat)
-                    else:
-                      scores = model(imgs,sexe)
-
+            imgs = data[0].to(self.device)
+            target = data[1:][0]
+            num_elems_in_batch = target.shape[0]                ## Forward
+            if AGE & SEXE:
+                sexe = target[:,0].reshape((num_elems_in_batch,1)).to(self.device)
+                age = target[:,1].reshape((num_elems_in_batch,1)).to(self.device)
+                target = target[:,2:].to(self.device)
+                if model.name == 'mobilenet_v2':
+                  feat = model.classifier(model.features(imgs))
+                  concat = torch.cat([feat,sexe,age],dim=1).float()
+                  scores = model.last(concat)
                 else:
-                    target = target[:,2:].to(self.device)
-                    scores = model(imgs)
+                    scores = model(imgs,sexe,age)
 
-                y_true.append(target.detach().numpy() if self.device=='cpu' else target.cpu().detach().numpy())
-                predictions.append(scores.detach().numpy() if self.device=='cpu' else scores.cpu().detach().numpy())
+            elif AGE:
+                age = target[:,0].reshape((num_elems_in_batch,1)).to(self.device)
+                target = target[:,2:].to(self.device)
+                if model.name == 'mobilenet_v2':
+                    feat = model.classifier(model.features(imgs))
+                    concat = torch.cat([feat,age],dim=1).float()
+                    scores = model.last(concat)
+                else:  
+                    scores = model(imgs,age)
 
-                # loss
-                loss = self.loss_fn(scores,target).sum()
+            elif SEXE:
+                sexe = target[:,1].reshape((num_elems_in_batch,1)).to(self.device)
+                target = target[:,2:].to(self.device)
+                if model.name == 'mobilenet_v2':
+                  feat = model.classifier(model.features(imgs))
+                  concat = torch.cat([feat,sexe],dim=1).float()
+                  scores = model.last(concat)
+                else:
+                    scores = model(imgs,sexe)
 
-                batch_losses.append(loss.item() if self.device=='cpu' else loss.cpu().item())
+            else:
+                target = target[:,2:].to(self.device)
+                scores = model(imgs)
+
+            y_true.append(target.detach().numpy() if self.device=='cpu' else target.cpu().detach().numpy())
+            predictions.append(scores.detach().numpy() if self.device=='cpu' else scores.cpu().detach().numpy())
+
+             # loss
+            loss = self.loss_fn(scores,target).sum()
+
+            batch_losses.append(loss.item() if self.device=='cpu' else loss.cpu().item())
 
                 
         average_loss = np.mean(batch_losses)
         print(f'Average test loss is {average_loss}')
         
-        wandb.log({"epoch":epoch_num,"epoch_test_loss": average_loss})
+        y_true= np.vstack(y_true)
+        predictions = np.vstack(predictions)
         
-#         y_true= np.vstack(y_true)
-#         predictions = np.vstack(predictions)
-        return average_loss
-#         return y_true,predictions,average_loss
+        mean_height_rel_error,mean_weight_rel_error = calculate_mean_absolute_error_results(y_true,predictions)
+        print(f'mean_height_rel_error = {mean_height_rel_error}')
+        print(f'mean_weight_rel_error = {mean_height_rel_error}')
+        
+        wandb.log({'epoch':epoch_num,'epoch_test_loss':average_loss, 'mean_height_rel_error':mean_height_rel_error, 'mean_weight_rel_error':mean_weight_rel_error})
+
+        return mean_height_rel_error,mean_weight_rel_error,average_loss
+
+
+
+
+def calculate_mean_absolute_error_results(y_true,predictions):
+    df = pd.DataFrame()
+    df['true_height'] = y_true[:,0]
+    df['true_weight'] = y_true[:,1]
+    df['predicted_height'] = predictions[:,0]
+    df['predicted_weight'] = predictions[:,1]
+    
+    df['height_rel_err'] = df.apply(lambda row : np.abs(row.true_height - row.predicted_height)/row.true_height,axis=1)
+    df['weight_rel_err'] = df.apply(lambda row : np.abs(row.true_weight - row.predicted_weight)/row.true_weight,axis=1)
+
+    mean_height_rel_error = df.height_rel_err.values.mean()
+    mean_weight_rel_error = df.weight_rel_err.values.mean()
+
+    return mean_height_rel_error,mean_weight_rel_error

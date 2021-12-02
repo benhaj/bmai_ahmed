@@ -6,7 +6,7 @@ import torch.optim as optim
 
 
 class BmaiTrainer:
-    def __init__(self, model, dataset, AGE=False, SEXE=False, train_size=0.8, batch_size=32, num_workers=0 ):
+    def __init__(self, model, dataset, AGE=False, SEXE=False, train_size=0.8, lr = 0.005, batch_size=32, num_workers=0 ):
         """
         Initializes the class Kather19Trainer which inherits from the parent class Trainer. The class implements a
         convenient way to log training metrics and train over multiple sessions.
@@ -26,6 +26,9 @@ class BmaiTrainer:
 
         # Model
         self.model = model.to(self.device)
+        
+        # Learning rate
+        self.lr = lr 
 
         # Data generators
         self.dataset = dataset
@@ -67,7 +70,7 @@ class BmaiTrainer:
         print(f'About to train for {epochs} epochs')
         model = self.model
         ## create optimizer
-        optimizer = optim.Adam(model.parameters(),lr=0.005)
+        optimizer = optim.Adam(model.parameters(),lr=self.lr)
         
         epoch_losses=[]
         for epoch in range(epochs):

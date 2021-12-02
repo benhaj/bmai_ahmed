@@ -9,6 +9,7 @@ import argparse
 from prepare_dataset import *
 from trainer_bmai_2 import *
 import torchvision
+import torch
 
 
 def get_args_parser():
@@ -20,6 +21,9 @@ def get_args_parser():
     parser.add_argument('--SEXE', type=bool, default=False, help='use sexe attribute ?')
     parser.add_argument('--AGE', type=bool, default=False, help='use age attribute ?')
     parser.add_argument('--epochs', type=int, default=15, help='how many training epochs')
+    parser.add_argument('--lr',type=float,default=0.005,help='learning rate')
+    parser.add_argument('--batch_size',type=int,default=32,help='batch size')
+    parser.add_argument('--num_workers',type=int,default=8,help='number of workers')
     return parser
 
 
@@ -39,8 +43,10 @@ def main(args):
         dataset = bmaiDataset(csv_file='/hdd/data/bmai_clean/full_cambodge_data.csv',transform=transforms,use_csv=True)
         
     ## Trainer:
-    trainer = BmaiTrainer(model, dataset, AGE=args.AGE, SEXE=args.SEXE, batch_size=32, num_workers=0)
-    mean_training_loss = trainer.train(args.epochs)
+    trainer = BmaiTrainer(model, dataset, AGE=args.AGE, SEXE=args.SEXE, batch_size=args.batch_size, lr = args.lr, num_workers=args.num_workers)
+    results,mean_training_loss = trainer.train(args.epochs)
+    torch.save(model,f'{args.model_name}_{args.data_name}_SEXE_{args.SEXE}_AGE_{args.AGE}_{args.epochs}_epochs.pt')
+    results.to_csv(f'{args.model_name}_{args.data_name}_SEXE_{args.SEXE}_AGE_{args.AGE}_{args.epochs}_epochs.csv')
     #y_true,predictions,average_loss = trainer.test()
 
 if __name__ == '__main__':
