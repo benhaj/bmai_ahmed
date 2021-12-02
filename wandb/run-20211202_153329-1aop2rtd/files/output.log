@@ -1,0 +1,59 @@
+
+cuda
+About to train for 15 epochs
+epoch: 0/14, batch 0/19, loss: 1665.9661451619304
+epoch: 0/14, batch 10/19, loss: 519.9696995711327
+for epoch 0 , average loss is 803.3273879614743
+About to test
+Average test loss is 251.7272934970856
+mean_height_rel_error = 0.13509726553863596
+mean_weight_rel_error = 0.13509726553863596
+epoch: 1/14, batch 0/19, loss: 227.4450743150711
+epoch: 1/14, batch 10/19, loss: 203.61556434631348
+for epoch 1 , average loss is 157.3137120654583
+About to test
+Average test loss is 163.77603269577025
+mean_height_rel_error = 0.08229665432825072
+mean_weight_rel_error = 0.08229665432825072
+epoch: 2/14, batch 0/19, loss: 127.23981636583807
+epoch: 2/14, batch 10/19, loss: 105.37883039474487
+for epoch 2 , average loss is 108.39596657589077
+About to test
+Average test loss is 131.35729557228086
+mean_height_rel_error = 0.08124512249087285
+mean_weight_rel_error = 0.08124512249087285
+epoch: 3/14, batch 0/19, loss: 94.85020871162415
+epoch: 3/14, batch 10/19, loss: 87.67731815338135
+for epoch 3 , average loss is 79.67765951514244
+About to test
+Average test loss is 116.8171322441101
+mean_height_rel_error = 0.07901967813911616
+mean_weight_rel_error = 0.07901967813911616
+epoch: 4/14, batch 0/19, loss: 44.44576585769653
+epoch: 4/14, batch 10/19, loss: 45.28068684577942
+for epoch 4 , average loss is 51.415218174457564
+About to test
+Average test loss is 109.61202482032778
+mean_height_rel_error = 0.07341544868398585
+mean_weight_rel_error = 0.07341544868398585
+epoch: 5/14, batch 0/19, loss: 30.475596494674683
+epoch: 5/14, batch 10/19, loss: 30.289556860923767
+for epoch 5 , average loss is 41.22665587234497
+About to test
+Average test loss is 111.68276860809324
+mean_height_rel_error = 0.07526622641938564
+mean_weight_rel_error = 0.07526622641938564
+epoch: 6/14, batch 0/19, loss: 52.311525650024414
+epoch: 6/14, batch 10/19, loss: 81.06243442058563
+for epoch 6 , average loss is 53.52294925379753
+About to test
+Average test loss is 104.99507429695129
+mean_height_rel_error = 0.0691392591101968
+mean_weight_rel_error = 0.0691392591101968
+epoch: 7/14, batch 0/19, loss: 32.51074100494385
+epoch: 7/14, batch 10/19, loss: 16.143625087738037
+for epoch 7 , average loss is 24.416009817361832
+About to test
+Average test loss is 121.56955164718629
+mean_height_rel_error = 0.07367330601983395
+mean_weight_rel_error = 0.07367330601983395

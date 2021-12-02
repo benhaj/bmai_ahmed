@@ -1,0 +1,52 @@
+
+About to train for 10 epochs
+epoch: 0/9, batch 0/19, loss: 1656.0501875595749
+epoch: 0/9, batch 10/19, loss: 523.5684276962281
+for epoch 0 , average loss is 928.4932033345549
+About to test
+Average test loss is 467.0525115089416
+epoch: 1/9, batch 0/19, loss: 463.96796508789066
+epoch: 1/9, batch 10/19, loss: 265.7845347213745
+for epoch 1 , average loss is 276.2849365240634
+About to test
+Average test loss is 168.2051556835175
+epoch: 2/9, batch 0/19, loss: 136.04288939476015
+epoch: 2/9, batch 10/19, loss: 99.92495648384093
+for epoch 2 , average loss is 119.33386033165456
+About to test
+Average test loss is 119.94253392791748
+epoch: 3/9, batch 0/19, loss: 89.12323301315308
+epoch: 3/9, batch 10/19, loss: 67.72592511177064
+for epoch 3 , average loss is 85.07097472429275
+About to test
+Average test loss is 110.8509357700348
+epoch: 4/9, batch 0/19, loss: 39.91958708763123
+epoch: 4/9, batch 10/19, loss: 84.72262722015381
+for epoch 4 , average loss is 57.1974361335039
+About to test
+Average test loss is 157.91114115905762
+epoch: 5/9, batch 0/19, loss: 111.51807338714599
+epoch: 5/9, batch 10/19, loss: 47.503636379241954
+for epoch 5 , average loss is 73.88487909984589
+About to test
+Average test loss is 128.6839341926575
+epoch: 6/9, batch 0/19, loss: 106.8702567100525
+epoch: 6/9, batch 10/19, loss: 30.041658811569214
+for epoch 6 , average loss is 45.85406763744355
+About to test
+Average test loss is 128.03049522018432
+epoch: 7/9, batch 0/19, loss: 35.9165358543396
+epoch: 7/9, batch 10/19, loss: 78.5019474029541
+for epoch 7 , average loss is 41.24288268148899
+About to test
+Average test loss is 123.04676215934751
+epoch: 8/9, batch 0/19, loss: 41.080074911117556
+epoch: 8/9, batch 10/19, loss: 29.799761600494385
+for epoch 8 , average loss is 23.68832913398743
+About to test
+Average test loss is 144.20155320930482
+epoch: 9/9, batch 0/19, loss: 68.29346899032593
+epoch: 9/9, batch 10/19, loss: 31.44114890098572
+for epoch 9 , average loss is 28.790931190729133
+About to test
+Average test loss is 151.0360953195095

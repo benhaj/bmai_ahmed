@@ -1,0 +1,22 @@
+Traceback (most recent call last):
+  File "/home/lts5-ts/Documents/ahmed/bmai_ahmed/demo_bmai.py", line 50, in <module>
+    main(args)
+  File "/home/lts5-ts/Documents/ahmed/bmai_ahmed/demo_bmai.py", line 39, in main
+    dataset = bmaiDataset(csv_file='/hdd/data/full_cambodge_data.csv',transform=transforms,use_csv=True)
+  File "/home/lts5-ts/Documents/ahmed/bmai_ahmed/prepare_dataset.py", line 43, in __init__
+    self.annotations = pd.read_csv(csv_file)
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/pandas/io/parsers.py", line 610, in read_csv
+    return _read(filepath_or_buffer, kwds)
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/pandas/io/parsers.py", line 462, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/pandas/io/parsers.py", line 819, in __init__
+    self._engine = self._make_engine(self.engine)
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/pandas/io/parsers.py", line 1050, in _make_engine
+    return mapping[engine](self.f, **self.options)  # type: ignore[call-arg]
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/pandas/io/parsers.py", line 1867, in __init__
+    self._open_handles(src, kwds)
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/pandas/io/parsers.py", line 1362, in _open_handles
+    self.handles = get_handle(
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/pandas/io/common.py", line 642, in get_handle
+    handle = open(
+FileNotFoundError: [Errno 2] No such file or directory: '/hdd/data/full_cambodge_data.csv'

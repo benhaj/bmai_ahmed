@@ -1,0 +1,35 @@
+{
+    "os": "Linux-5.11.0-38-generic-x86_64-with-glibc2.31",
+    "python": "3.9.4",
+    "heartbeatAt": "2021-12-01T17:51:38.070987",
+    "startedAt": "2021-12-01T17:51:37.380732",
+    "docker": null,
+    "gpu": "GeForce RTX 3070",
+    "gpu_count": 1,
+    "cpu_count": 16,
+    "cuda": null,
+    "args": [
+        "--model_name",
+        "mobilenet",
+        "--data_name",
+        "guinee",
+        "--SEXE",
+        "False",
+        "--AGE",
+        "False",
+        "--epochs",
+        "20"
+    ],
+    "state": "running",
+    "program": "/home/lts5-ts/Documents/ahmed/bmai_ahmed/demo_bmai.py",
+    "codePath": "demo_bmai.py",
+    "git": {
+        "remote": "git@github.com:benhaj/bmai_ahmed.git",
+        "commit": "d3c446fe8611e6a337ae938b931cef7b3e6d91f4"
+    },
+    "email": "thomas.steg87@gmail.com",
+    "root": "/home/lts5-ts/Documents/ahmed/bmai_ahmed",
+    "host": "lts5-ts",
+    "username": "lts5-ts",
+    "executable": "/home/lts5-ts/anaconda3/envs/pycolo/bin/python"
+}

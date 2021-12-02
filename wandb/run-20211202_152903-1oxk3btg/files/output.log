@@ -1,0 +1,60 @@
+
+About to train for 15 epochs
+epoch: 0/14, batch 0/19, loss: 1704.0050515452026
+epoch: 0/14, batch 10/19, loss: 539.7594622421265
+for epoch 0 , average loss is 906.3993989994673
+About to test
+Average test loss is 362.40345054626465
+mean_height_rel_error = 0.13812543452772025
+mean_weight_rel_error = 0.13812543452772025
+epoch: 1/14, batch 0/19, loss: 385.81446498870855
+epoch: 1/14, batch 10/19, loss: 197.64640600204467
+for epoch 1 , average loss is 229.34580555933712
+About to test
+Average test loss is 306.8071446990967
+mean_height_rel_error = 0.15064565349021067
+mean_weight_rel_error = 0.15064565349021067
+epoch: 2/14, batch 0/19, loss: 296.30409002304077
+Traceback (most recent call last):
+  File "/home/lts5-ts/Documents/ahmed/bmai_ahmed/demo_bmai.py", line 53, in <module>
+    main(args)
+  File "/home/lts5-ts/Documents/ahmed/bmai_ahmed/demo_bmai.py", line 44, in main
+    results,mean_training_loss = trainer.train(args.epochs)
+  File "/home/lts5-ts/Documents/ahmed/bmai_ahmed/trainer_bmai_2.py", line 128, in train
+    for batch_idx, data in enumerate(self.train_dataloader):
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/torch/utils/data/dataloader.py", line 521, in __next__
+    data = self._next_data()
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/torch/utils/data/dataloader.py", line 561, in _next_data
+    data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/torch/utils/data/_utils/fetch.py", line 44, in fetch
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/torch/utils/data/_utils/fetch.py", line 44, in <listcomp>
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/torch/utils/data/dataset.py", line 311, in __getitem__
+    return self.dataset[self.indices[idx]]
+  File "/home/lts5-ts/Documents/ahmed/bmai_ahmed/prepare_dataset.py", line 64, in __getitem__
+    img = io.imread(new_path)
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/skimage/io/_io.py", line 48, in imread
+    img = call_plugin('imread', fname, plugin=plugin, **plugin_args)
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/skimage/io/manage_plugins.py", line 207, in call_plugin
+    return func(*args, **kwargs)
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/skimage/io/_plugins/imageio_plugin.py", line 10, in imread
+    return np.asarray(imageio_imread(*args, **kwargs))
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/imageio/core/functions.py", line 265, in imread
+    reader = read(uri, format, "i", **kwargs)
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/imageio/core/functions.py", line 186, in get_reader
+    return format.get_reader(request)
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/imageio/core/format.py", line 170, in get_reader
+    return self.Reader(self, request)
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/imageio/core/format.py", line 221, in __init__
+    self._open(**self.request.kwargs.copy())
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/imageio/plugins/pillow.py", line 429, in _open
+    return PillowFormat.Reader._open(self, pilmode=pilmode, as_gray=as_gray)
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/imageio/plugins/pillow.py", line 135, in _open
+    pil_try_read(self._im)
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/imageio/plugins/pillow.py", line 669, in pil_try_read
+    im.getdata()[0]
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/PIL/Image.py", line 1292, in getdata
+    self.load()
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/PIL/ImageFile.py", line 255, in load
+    n, err_code = decoder.decode(b)

@@ -1,0 +1,56 @@
+2021-12-01 18:51:37,774 INFO    MainThread:1672124 [internal.py:wandb_internal():86] W&B internal server running at pid: 1672124, started at: 2021-12-01 18:51:37.774469
+2021-12-01 18:51:37,775 DEBUG   HandlerThread:1672124 [handler.py:handle_request():126] handle_request: check_version
+2021-12-01 18:51:37,775 INFO    WriterThread:1672124 [datastore.py:open_for_write():77] open: /home/lts5-ts/Documents/ahmed/bmai_ahmed/wandb/run-20211201_185137-3ow89wtc/run-3ow89wtc.wandb
+2021-12-01 18:51:37,776 DEBUG   SenderThread:1672124 [sender.py:send():185] send: header
+2021-12-01 18:51:37,776 DEBUG   SenderThread:1672124 [sender.py:send_request():199] send_request: check_version
+2021-12-01 18:51:37,855 DEBUG   SenderThread:1672124 [sender.py:send():185] send: run
+2021-12-01 18:51:38,060 INFO    SenderThread:1672124 [dir_watcher.py:__init__():169] watching files in: /home/lts5-ts/Documents/ahmed/bmai_ahmed/wandb/run-20211201_185137-3ow89wtc/files
+2021-12-01 18:51:38,061 INFO    SenderThread:1672124 [sender.py:_start_run_threads():746] run started: 3ow89wtc with start time 1638381097
+2021-12-01 18:51:38,061 DEBUG   SenderThread:1672124 [sender.py:send():185] send: summary
+2021-12-01 18:51:38,062 INFO    SenderThread:1672124 [sender.py:_save_file():879] saving file wandb-summary.json with policy end
+2021-12-01 18:51:38,063 DEBUG   HandlerThread:1672124 [handler.py:handle_request():126] handle_request: run_start
+2021-12-01 18:51:38,070 DEBUG   HandlerThread:1672124 [meta.py:__init__():40] meta init
+2021-12-01 18:51:38,070 DEBUG   HandlerThread:1672124 [meta.py:__init__():54] meta init done
+2021-12-01 18:51:38,070 DEBUG   HandlerThread:1672124 [meta.py:probe():211] probe
+2021-12-01 18:51:38,077 DEBUG   HandlerThread:1672124 [meta.py:_setup_git():201] setup git
+2021-12-01 18:51:38,117 DEBUG   HandlerThread:1672124 [meta.py:_setup_git():208] setup git done
+2021-12-01 18:51:38,118 DEBUG   HandlerThread:1672124 [meta.py:_save_pip():58] save pip
+2021-12-01 18:51:38,118 DEBUG   HandlerThread:1672124 [meta.py:_save_pip():72] save pip done
+2021-12-01 18:51:38,118 DEBUG   HandlerThread:1672124 [meta.py:_save_conda():79] save conda
+2021-12-01 18:51:39,061 INFO    Thread-8  :1672124 [dir_watcher.py:_on_file_created():217] file/dir created: /home/lts5-ts/Documents/ahmed/bmai_ahmed/wandb/run-20211201_185137-3ow89wtc/files/wandb-summary.json
+2021-12-01 18:51:39,061 INFO    Thread-8  :1672124 [dir_watcher.py:_on_file_created():217] file/dir created: /home/lts5-ts/Documents/ahmed/bmai_ahmed/wandb/run-20211201_185137-3ow89wtc/files/requirements.txt
+2021-12-01 18:51:39,061 INFO    Thread-8  :1672124 [dir_watcher.py:_on_file_created():217] file/dir created: /home/lts5-ts/Documents/ahmed/bmai_ahmed/wandb/run-20211201_185137-3ow89wtc/files/conda-environment.yaml
+2021-12-01 18:51:39,322 DEBUG   HandlerThread:1672124 [meta.py:_save_conda():87] save conda done
+2021-12-01 18:51:39,322 DEBUG   HandlerThread:1672124 [meta.py:probe():249] probe done
+2021-12-01 18:51:39,324 DEBUG   SenderThread:1672124 [sender.py:send():185] send: files
+2021-12-01 18:51:39,324 INFO    SenderThread:1672124 [sender.py:_save_file():879] saving file wandb-metadata.json with policy now
+2021-12-01 18:51:39,327 DEBUG   HandlerThread:1672124 [handler.py:handle_request():126] handle_request: stop_status
+2021-12-01 18:51:39,328 DEBUG   SenderThread:1672124 [sender.py:send_request():199] send_request: stop_status
+2021-12-01 18:51:39,876 INFO    Thread-11 :1672124 [upload_job.py:push():137] Uploaded file /tmp/tmpqryj4pliwandb/1dhuhm0u-wandb-metadata.json
+2021-12-01 18:51:40,061 INFO    Thread-8  :1672124 [dir_watcher.py:_on_file_modified():230] file/dir modified: /home/lts5-ts/Documents/ahmed/bmai_ahmed/wandb/run-20211201_185137-3ow89wtc/files/conda-environment.yaml
+2021-12-01 18:51:40,061 INFO    Thread-8  :1672124 [dir_watcher.py:_on_file_created():217] file/dir created: /home/lts5-ts/Documents/ahmed/bmai_ahmed/wandb/run-20211201_185137-3ow89wtc/files/output.log
+2021-12-01 18:51:40,061 INFO    Thread-8  :1672124 [dir_watcher.py:_on_file_created():217] file/dir created: /home/lts5-ts/Documents/ahmed/bmai_ahmed/wandb/run-20211201_185137-3ow89wtc/files/wandb-metadata.json
+2021-12-01 18:51:44,062 INFO    Thread-8  :1672124 [dir_watcher.py:_on_file_modified():230] file/dir modified: /home/lts5-ts/Documents/ahmed/bmai_ahmed/wandb/run-20211201_185137-3ow89wtc/files/output.log
+2021-12-01 18:51:47,528 WARNING MainThread:1672124 [internal.py:wandb_internal():145] Internal process interrupt: 1
+2021-12-01 18:51:48,063 INFO    Thread-8  :1672124 [dir_watcher.py:_on_file_modified():230] file/dir modified: /home/lts5-ts/Documents/ahmed/bmai_ahmed/wandb/run-20211201_185137-3ow89wtc/files/output.log
+2021-12-01 18:51:48,564 WARNING MainThread:1672124 [internal.py:wandb_internal():145] Internal process interrupt: 2
+2021-12-01 18:51:48,564 ERROR   MainThread:1672124 [internal.py:wandb_internal():148] Internal process interrupted.
+2021-12-01 18:51:49,337 INFO    SenderThread:1672124 [sender.py:finish():986] shutting down sender
+2021-12-01 18:51:49,337 INFO    SenderThread:1672124 [dir_watcher.py:finish():283] shutting down directory watcher
+2021-12-01 18:51:49,338 INFO    WriterThread:1672124 [datastore.py:close():281] close: /home/lts5-ts/Documents/ahmed/bmai_ahmed/wandb/run-20211201_185137-3ow89wtc/run-3ow89wtc.wandb
+2021-12-01 18:51:49,339 INFO    HandlerThread:1672124 [handler.py:finish():683] shutting down handler
+2021-12-01 18:51:50,065 INFO    SenderThread:1672124 [dir_watcher.py:finish():313] scan: /home/lts5-ts/Documents/ahmed/bmai_ahmed/wandb/run-20211201_185137-3ow89wtc/files
+2021-12-01 18:51:50,065 INFO    SenderThread:1672124 [dir_watcher.py:finish():327] scan save: /home/lts5-ts/Documents/ahmed/bmai_ahmed/wandb/run-20211201_185137-3ow89wtc/files/wandb-summary.json wandb-summary.json
+2021-12-01 18:51:50,066 INFO    SenderThread:1672124 [dir_watcher.py:finish():327] scan save: /home/lts5-ts/Documents/ahmed/bmai_ahmed/wandb/run-20211201_185137-3ow89wtc/files/wandb-metadata.json wandb-metadata.json
+2021-12-01 18:51:50,066 INFO    SenderThread:1672124 [dir_watcher.py:finish():327] scan save: /home/lts5-ts/Documents/ahmed/bmai_ahmed/wandb/run-20211201_185137-3ow89wtc/files/config.yaml config.yaml
+2021-12-01 18:51:50,066 INFO    SenderThread:1672124 [dir_watcher.py:finish():327] scan save: /home/lts5-ts/Documents/ahmed/bmai_ahmed/wandb/run-20211201_185137-3ow89wtc/files/output.log output.log
+2021-12-01 18:51:50,067 INFO    SenderThread:1672124 [dir_watcher.py:finish():327] scan save: /home/lts5-ts/Documents/ahmed/bmai_ahmed/wandb/run-20211201_185137-3ow89wtc/files/conda-environment.yaml conda-environment.yaml
+2021-12-01 18:51:50,068 INFO    SenderThread:1672124 [dir_watcher.py:finish():327] scan save: /home/lts5-ts/Documents/ahmed/bmai_ahmed/wandb/run-20211201_185137-3ow89wtc/files/requirements.txt requirements.txt
+2021-12-01 18:51:50,068 INFO    SenderThread:1672124 [file_pusher.py:finish():177] shutting down file pusher
+2021-12-01 18:51:50,068 INFO    SenderThread:1672124 [file_pusher.py:join():182] waiting for file pusher
+2021-12-01 18:51:50,621 INFO    Thread-15 :1672124 [upload_job.py:push():137] Uploaded file /home/lts5-ts/Documents/ahmed/bmai_ahmed/wandb/run-20211201_185137-3ow89wtc/files/conda-environment.yaml
+2021-12-01 18:51:50,661 INFO    Thread-16 :1672124 [upload_job.py:push():137] Uploaded file /home/lts5-ts/Documents/ahmed/bmai_ahmed/wandb/run-20211201_185137-3ow89wtc/files/requirements.txt
+2021-12-01 18:51:50,671 INFO    Thread-14 :1672124 [upload_job.py:push():137] Uploaded file /home/lts5-ts/Documents/ahmed/bmai_ahmed/wandb/run-20211201_185137-3ow89wtc/files/output.log
+2021-12-01 18:51:50,683 INFO    Thread-13 :1672124 [upload_job.py:push():137] Uploaded file /home/lts5-ts/Documents/ahmed/bmai_ahmed/wandb/run-20211201_185137-3ow89wtc/files/config.yaml
+2021-12-01 18:51:50,709 INFO    Thread-12 :1672124 [upload_job.py:push():137] Uploaded file /home/lts5-ts/Documents/ahmed/bmai_ahmed/wandb/run-20211201_185137-3ow89wtc/files/wandb-summary.json
+2021-12-01 18:51:51,216 INFO    MainThread:1672124 [internal.py:handle_exit():76] Internal process exited

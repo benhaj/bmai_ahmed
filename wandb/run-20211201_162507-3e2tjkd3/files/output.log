@@ -1,0 +1,58 @@
+
+About to train for 10 epochs
+epoch: 0/9, batch 0/19, loss: 1678.6745801080765
+epoch: 0/9, batch 10/19, loss: 420.75284603118894
+for epoch 0 , average loss is 756.7563342892527
+About to test
+Average test loss is 254.63786326742175
+epoch: 1/9, batch 0/19, loss: 246.47410829544066
+epoch: 1/9, batch 10/19, loss: 117.75122931957245
+for epoch 1 , average loss is 167.6253178707361
+About to test
+Average test loss is 175.21387703323364
+epoch: 2/9, batch 0/19, loss: 132.78605724334716
+epoch: 2/9, batch 10/19, loss: 105.95012543201446
+for epoch 2 , average loss is 103.25499867081642
+About to test
+Average test loss is 110.18543914794923
+epoch: 3/9, batch 0/19, loss: 66.96310779571533
+epoch: 3/9, batch 10/19, loss: 122.44219778060912
+for epoch 3 , average loss is 75.45592348790169
+About to test
+Average test loss is 111.34489441013336
+epoch: 4/9, batch 0/19, loss: 21.218197231292727
+epoch: 4/9, batch 10/19, loss: 36.20141184806824
+for epoch 4 , average loss is 47.23097126722335
+About to test
+Average test loss is 102.42091502857208
+epoch: 5/9, batch 0/19, loss: 53.63161960601806
+epoch: 5/9, batch 10/19, loss: 42.670530281066895
+for epoch 5 , average loss is 33.72750082945823
+About to test
+Average test loss is 104.21058355903624
+epoch: 6/9, batch 0/19, loss: 21.607331314086913
+epoch: 6/9, batch 10/19, loss: 22.78072001457214
+for epoch 6 , average loss is 27.95057010674477
+About to test
+Average test loss is 165.47112842178345
+epoch: 7/9, batch 0/19, loss: 151.87467387199402
+epoch: 7/9, batch 10/19, loss: 68.71052186012267
+for epoch 7 , average loss is 83.43298664915562
+About to test
+Average test loss is 189.47584140396117
+epoch: 8/9, batch 0/19, loss: 160.05034058570862
+epoch: 8/9, batch 10/19, loss: 55.09492082595825
+for epoch 8 , average loss is 92.2266520473361
+About to test
+Average test loss is 121.36723569583891
+epoch: 9/9, batch 0/19, loss: 50.95936864376068
+epoch: 9/9, batch 10/19, loss: 41.74670545578003
+for epoch 9 , average loss is 34.40439257621766
+About to test
+Traceback (most recent call last):
+  File "/home/lts5-ts/Documents/ahmed/bmai_ahmed/demo_bmai.py", line 50, in <module>
+    main(args)
+  File "/home/lts5-ts/Documents/ahmed/bmai_ahmed/demo_bmai.py", line 44, in main
+    y_true,predictions,average_loss = trainer.test()
+TypeError: test() missing 1 required positional argument: 'epoch_num'
+Average test loss is 97.69830627918245

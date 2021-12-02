@@ -1,0 +1,331 @@
+
+About to train for 20 epochs
+epoch: 0/19, batch 0/173, loss: 2978.238825649023
+epoch: 0/19, batch 10/173, loss: 963.3743125915528
+epoch: 0/19, batch 20/173, loss: 601.1565216064453
+epoch: 0/19, batch 30/173, loss: 335.8748872566223
+epoch: 0/19, batch 40/173, loss: 339.16906967163084
+epoch: 0/19, batch 50/173, loss: 285.85498361587526
+epoch: 0/19, batch 60/173, loss: 400.503055229187
+epoch: 0/19, batch 70/173, loss: 234.78925991058347
+epoch: 0/19, batch 80/173, loss: 175.8421136856079
+epoch: 0/19, batch 90/173, loss: 421.54834823608394
+epoch: 0/19, batch 100/173, loss: 448.06323900222776
+epoch: 0/19, batch 110/173, loss: 291.59837055206305
+epoch: 0/19, batch 120/173, loss: 244.9154055595398
+epoch: 0/19, batch 130/173, loss: 200.7554925918579
+epoch: 0/19, batch 140/173, loss: 240.30010299682615
+epoch: 0/19, batch 150/173, loss: 181.78321981430057
+epoch: 0/19, batch 160/173, loss: 256.663862323761
+epoch: 0/19, batch 170/173, loss: 362.05119800567627
+for epoch 0 , average loss is 415.32285017742515
+About to test
+Average test loss is 262.0897294174541
+epoch: 1/19, batch 0/173, loss: 250.03451433181758
+epoch: 1/19, batch 10/173, loss: 229.6391167640686
+epoch: 1/19, batch 20/173, loss: 180.69009256362915
+epoch: 1/19, batch 30/173, loss: 243.35213022232057
+epoch: 1/19, batch 40/173, loss: 138.66704460144044
+epoch: 1/19, batch 50/173, loss: 161.41006460189817
+epoch: 1/19, batch 60/173, loss: 227.84462909698487
+epoch: 1/19, batch 70/173, loss: 318.6665956497192
+epoch: 1/19, batch 80/173, loss: 192.48619117736814
+epoch: 1/19, batch 90/173, loss: 121.39049015045167
+epoch: 1/19, batch 100/173, loss: 230.09076442718506
+epoch: 1/19, batch 110/173, loss: 155.41948308944703
+epoch: 1/19, batch 120/173, loss: 222.18157711029053
+epoch: 1/19, batch 130/173, loss: 227.33582611083983
+epoch: 1/19, batch 140/173, loss: 218.73374614715573
+epoch: 1/19, batch 150/173, loss: 142.4643783569336
+epoch: 1/19, batch 160/173, loss: 188.03864803314207
+epoch: 1/19, batch 170/173, loss: 306.76421899795537
+for epoch 1 , average loss is 188.3898602015397
+About to test
+Average test loss is 258.10881751667375
+epoch: 2/19, batch 0/173, loss: 229.94225606918337
+epoch: 2/19, batch 10/173, loss: 191.07297697067258
+epoch: 2/19, batch 20/173, loss: 170.24456939697268
+epoch: 2/19, batch 30/173, loss: 154.8247762680054
+epoch: 2/19, batch 40/173, loss: 134.54010248184207
+epoch: 2/19, batch 50/173, loss: 225.40711870193482
+epoch: 2/19, batch 60/173, loss: 237.1124998855591
+epoch: 2/19, batch 70/173, loss: 186.71534755706784
+epoch: 2/19, batch 80/173, loss: 101.18353385925293
+epoch: 2/19, batch 90/173, loss: 243.94127187728884
+epoch: 2/19, batch 100/173, loss: 182.80509834289552
+epoch: 2/19, batch 110/173, loss: 158.116637802124
+epoch: 2/19, batch 120/173, loss: 306.28705883026123
+epoch: 2/19, batch 130/173, loss: 195.86849279403685
+epoch: 2/19, batch 140/173, loss: 181.59108533859256
+epoch: 2/19, batch 150/173, loss: 163.51584968566894
+epoch: 2/19, batch 160/173, loss: 135.25913238525388
+epoch: 2/19, batch 170/173, loss: 142.00579900741576
+for epoch 2 , average loss is 175.70219351867146
+About to test
+Average test loss is 188.88914783000945
+epoch: 3/19, batch 0/173, loss: 81.27127285003661
+epoch: 3/19, batch 10/173, loss: 76.14743576049804
+epoch: 3/19, batch 20/173, loss: 260.6648738861084
+epoch: 3/19, batch 30/173, loss: 286.5817241668701
+epoch: 3/19, batch 40/173, loss: 113.07047042846679
+epoch: 3/19, batch 50/173, loss: 177.58172645568848
+epoch: 3/19, batch 60/173, loss: 194.3352956771851
+epoch: 3/19, batch 70/173, loss: 113.20038032531737
+epoch: 3/19, batch 80/173, loss: 137.10919713973996
+epoch: 3/19, batch 90/173, loss: 167.29409818649293
+epoch: 3/19, batch 100/173, loss: 88.18668270111084
+epoch: 3/19, batch 110/173, loss: 127.69137992858887
+epoch: 3/19, batch 120/173, loss: 160.32038497924805
+epoch: 3/19, batch 130/173, loss: 231.1583399772644
+epoch: 3/19, batch 140/173, loss: 96.21268682479857
+epoch: 3/19, batch 150/173, loss: 186.37666053771972
+epoch: 3/19, batch 160/173, loss: 60.754742431640636
+epoch: 3/19, batch 170/173, loss: 103.0909973144531
+for epoch 3 , average loss is 135.6547882599666
+About to test
+Average test loss is 250.54091156395998
+epoch: 4/19, batch 0/173, loss: 182.0823324203491
+epoch: 4/19, batch 10/173, loss: 101.08027639389039
+epoch: 4/19, batch 20/173, loss: 116.56108436584472
+epoch: 4/19, batch 30/173, loss: 242.95486354827884
+epoch: 4/19, batch 40/173, loss: 128.76264028549195
+epoch: 4/19, batch 50/173, loss: 143.71315593719484
+epoch: 4/19, batch 60/173, loss: 97.45352973937986
+epoch: 4/19, batch 70/173, loss: 73.39636793136596
+epoch: 4/19, batch 80/173, loss: 113.19775142669675
+epoch: 4/19, batch 90/173, loss: 95.85401077270508
+epoch: 4/19, batch 100/173, loss: 184.08123607635497
+epoch: 4/19, batch 110/173, loss: 82.0118863105774
+epoch: 4/19, batch 120/173, loss: 107.1304841041565
+epoch: 4/19, batch 130/173, loss: 100.01492166519162
+epoch: 4/19, batch 140/173, loss: 166.33080606460572
+epoch: 4/19, batch 150/173, loss: 86.36548185348511
+epoch: 4/19, batch 160/173, loss: 114.97427310943603
+epoch: 4/19, batch 170/173, loss: 153.0113473892212
+for epoch 4 , average loss is 110.80006073080263
+About to test
+Average test loss is 178.42966700683942
+epoch: 5/19, batch 0/173, loss: 105.24297313690185
+epoch: 5/19, batch 10/173, loss: 107.88026262283323
+epoch: 5/19, batch 20/173, loss: 74.67247085571287
+epoch: 5/19, batch 30/173, loss: 182.47004299163817
+epoch: 5/19, batch 40/173, loss: 179.83751277923582
+epoch: 5/19, batch 50/173, loss: 89.60516290664675
+epoch: 5/19, batch 60/173, loss: 83.0560523033142
+epoch: 5/19, batch 70/173, loss: 73.07084140777589
+epoch: 5/19, batch 80/173, loss: 114.34071598052977
+epoch: 5/19, batch 90/173, loss: 121.97435617446898
+epoch: 5/19, batch 100/173, loss: 138.64579362869264
+epoch: 5/19, batch 110/173, loss: 152.34940690994262
+epoch: 5/19, batch 120/173, loss: 120.46892881393431
+epoch: 5/19, batch 130/173, loss: 74.81958432197573
+epoch: 5/19, batch 140/173, loss: 68.96578378677367
+epoch: 5/19, batch 150/173, loss: 79.6956844329834
+epoch: 5/19, batch 160/173, loss: 173.48204107284545
+epoch: 5/19, batch 170/173, loss: 165.4421827316284
+for epoch 5 , average loss is 96.72324234666495
+About to test
+Average test loss is 217.3959742892872
+epoch: 6/19, batch 0/173, loss: 145.34728956222534
+epoch: 6/19, batch 10/173, loss: 69.60376949310304
+epoch: 6/19, batch 20/173, loss: 49.05081129074096
+epoch: 6/19, batch 30/173, loss: 67.62953319549561
+epoch: 6/19, batch 40/173, loss: 44.8681182861328
+epoch: 6/19, batch 50/173, loss: 75.93329429626463
+epoch: 6/19, batch 60/173, loss: 91.79445409774777
+epoch: 6/19, batch 70/173, loss: 36.074725723266596
+epoch: 6/19, batch 80/173, loss: 86.62190208435058
+epoch: 6/19, batch 90/173, loss: 98.01838426589964
+epoch: 6/19, batch 100/173, loss: 50.67568817138671
+epoch: 6/19, batch 110/173, loss: 93.25413904190066
+epoch: 6/19, batch 120/173, loss: 87.01917695999143
+epoch: 6/19, batch 130/173, loss: 44.42159938812257
+epoch: 6/19, batch 140/173, loss: 77.19923095703126
+epoch: 6/19, batch 150/173, loss: 82.55003385543824
+epoch: 6/19, batch 160/173, loss: 144.18998174667357
+epoch: 6/19, batch 170/173, loss: 46.43211479187012
+for epoch 6 , average loss is 74.48610403049952
+About to test
+Average test loss is 178.5909133867784
+epoch: 7/19, batch 0/173, loss: 54.65085248947145
+epoch: 7/19, batch 10/173, loss: 89.4666763305664
+epoch: 7/19, batch 20/173, loss: 88.34161806106567
+epoch: 7/19, batch 30/173, loss: 96.89428997039795
+epoch: 7/19, batch 40/173, loss: 83.52403602600097
+epoch: 7/19, batch 50/173, loss: 275.4258293151855
+epoch: 7/19, batch 60/173, loss: 248.2722982406616
+epoch: 7/19, batch 70/173, loss: 82.80260858535769
+epoch: 7/19, batch 80/173, loss: 64.25527820587159
+epoch: 7/19, batch 90/173, loss: 53.227059555053714
+epoch: 7/19, batch 100/173, loss: 104.63280401229856
+epoch: 7/19, batch 110/173, loss: 70.60408143997194
+epoch: 7/19, batch 120/173, loss: 67.77840356826783
+epoch: 7/19, batch 130/173, loss: 64.06993837356568
+epoch: 7/19, batch 140/173, loss: 37.145438861846934
+epoch: 7/19, batch 150/173, loss: 74.23475742340088
+epoch: 7/19, batch 160/173, loss: 75.1924307823181
+epoch: 7/19, batch 170/173, loss: 127.51729434013366
+for epoch 7 , average loss is 87.65280516317522
+About to test
+Average test loss is 266.3489540899884
+epoch: 8/19, batch 0/173, loss: 260.0591843032837
+epoch: 8/19, batch 10/173, loss: 59.18884935379026
+epoch: 8/19, batch 20/173, loss: 57.984152030944855
+epoch: 8/19, batch 30/173, loss: 75.17300920486448
+epoch: 8/19, batch 40/173, loss: 37.82893567085266
+epoch: 8/19, batch 50/173, loss: 31.98003702163696
+epoch: 8/19, batch 60/173, loss: 89.17651829719543
+epoch: 8/19, batch 70/173, loss: 36.64535217285156
+epoch: 8/19, batch 80/173, loss: 47.22433252334594
+epoch: 8/19, batch 90/173, loss: 43.2226782798767
+epoch: 8/19, batch 100/173, loss: 61.51925315856934
+epoch: 8/19, batch 110/173, loss: 43.80262012481688
+epoch: 8/19, batch 120/173, loss: 46.70473680496215
+epoch: 8/19, batch 130/173, loss: 71.30311183929442
+epoch: 8/19, batch 140/173, loss: 59.157999515533454
+epoch: 8/19, batch 150/173, loss: 51.67693214416504
+epoch: 8/19, batch 160/173, loss: 92.10824203491211
+epoch: 8/19, batch 170/173, loss: 70.69516696929932
+for epoch 8 , average loss is 63.0285480341418
+About to test
+Average test loss is 170.43571660952136
+epoch: 9/19, batch 0/173, loss: 33.91748876571656
+epoch: 9/19, batch 10/173, loss: 67.29884357452393
+epoch: 9/19, batch 20/173, loss: 40.9291729927063
+epoch: 9/19, batch 30/173, loss: 89.9442663192749
+epoch: 9/19, batch 40/173, loss: 45.93478174209596
+epoch: 9/19, batch 50/173, loss: 70.40347518920899
+epoch: 9/19, batch 60/173, loss: 99.56506538391113
+epoch: 9/19, batch 70/173, loss: 58.39770793914795
+epoch: 9/19, batch 80/173, loss: 42.57973012924192
+epoch: 9/19, batch 90/173, loss: 105.40808576583863
+epoch: 9/19, batch 100/173, loss: 46.35813436508178
+epoch: 9/19, batch 110/173, loss: 66.94985103607178
+epoch: 9/19, batch 120/173, loss: 78.50034608840943
+epoch: 9/19, batch 130/173, loss: 51.66035819053647
+epoch: 9/19, batch 140/173, loss: 37.99324836730956
+epoch: 9/19, batch 150/173, loss: 123.06486592292782
+epoch: 9/19, batch 160/173, loss: 33.31181964874267
+epoch: 9/19, batch 170/173, loss: 26.072227191925048
+for epoch 9 , average loss is 72.0772521266718
+About to test
+Average test loss is 165.9823376828974
+epoch: 10/19, batch 0/173, loss: 25.076843261718757
+epoch: 10/19, batch 10/173, loss: 34.16271419525146
+epoch: 10/19, batch 20/173, loss: 40.35730028152466
+epoch: 10/19, batch 30/173, loss: 41.37938432693481
+epoch: 10/19, batch 40/173, loss: 60.19936742782593
+epoch: 10/19, batch 50/173, loss: 37.189636898040774
+epoch: 10/19, batch 60/173, loss: 54.52524251937868
+epoch: 10/19, batch 70/173, loss: 76.7652572631836
+epoch: 10/19, batch 80/173, loss: 46.864615726470944
+epoch: 10/19, batch 90/173, loss: 190.7133239746094
+epoch: 10/19, batch 100/173, loss: 120.43215112686158
+epoch: 10/19, batch 110/173, loss: 92.43315229415893
+epoch: 10/19, batch 120/173, loss: 50.97813739776612
+epoch: 10/19, batch 130/173, loss: 39.319472789764404
+epoch: 10/19, batch 140/173, loss: 132.58552112579343
+epoch: 10/19, batch 150/173, loss: 75.79549436569215
+epoch: 10/19, batch 160/173, loss: 121.26970310211183
+epoch: 10/19, batch 170/173, loss: 37.98215694427491
+for epoch 10 , average loss is 63.36160457797433
+About to test
+Average test loss is 226.9709533778104
+epoch: 11/19, batch 0/173, loss: 124.31767711639404
+epoch: 11/19, batch 10/173, loss: 177.45382068634032
+epoch: 11/19, batch 20/173, loss: 52.85466499328612
+epoch: 11/19, batch 30/173, loss: 28.281416702270512
+epoch: 11/19, batch 40/173, loss: 39.228502559661855
+epoch: 11/19, batch 50/173, loss: 41.56396169662476
+epoch: 11/19, batch 60/173, loss: 31.976952362060544
+epoch: 11/19, batch 70/173, loss: 27.424665069580076
+epoch: 11/19, batch 80/173, loss: 37.86962280273437
+epoch: 11/19, batch 90/173, loss: 19.67084493637086
+epoch: 11/19, batch 100/173, loss: 32.77315616607666
+epoch: 11/19, batch 110/173, loss: 46.183415412902825
+epoch: 11/19, batch 120/173, loss: 31.98436517715454
+epoch: 11/19, batch 130/173, loss: 80.24522757530212
+epoch: 11/19, batch 140/173, loss: 57.32251405715942
+epoch: 11/19, batch 150/173, loss: 44.148634719848644
+epoch: 11/19, batch 160/173, loss: 27.52657775878906
+epoch: 11/19, batch 170/173, loss: 33.1287265777588
+for epoch 11 , average loss is 46.39737027606744
+About to test
+Average test loss is 168.58458011367105
+epoch: 12/19, batch 0/173, loss: 22.821263980865474
+epoch: 12/19, batch 10/173, loss: 65.02534589767455
+epoch: 12/19, batch 20/173, loss: 25.324643993377688
+epoch: 12/19, batch 30/173, loss: 15.070144844055177
+epoch: 12/19, batch 40/173, loss: 40.58362617492675
+epoch: 12/19, batch 50/173, loss: 51.32256755828858
+epoch: 12/19, batch 60/173, loss: 44.832318210601805
+epoch: 12/19, batch 70/173, loss: 21.039038467407224
+epoch: 12/19, batch 80/173, loss: 23.84237213134766
+epoch: 12/19, batch 90/173, loss: 43.98742284774781
+epoch: 12/19, batch 100/173, loss: 223.32103767395023
+epoch: 12/19, batch 110/173, loss: 60.68403921127318
+epoch: 12/19, batch 120/173, loss: 30.107181310653683
+epoch: 12/19, batch 130/173, loss: 68.59862794876099
+epoch: 12/19, batch 140/173, loss: 23.444100284576415
+epoch: 12/19, batch 150/173, loss: 42.97365198135378
+epoch: 12/19, batch 160/173, loss: 34.328132724761964
+epoch: 12/19, batch 170/173, loss: 65.37038574218751
+for epoch 12 , average loss is 39.50365987465299
+About to test
+Average test loss is 177.36530591249468
+epoch: 13/19, batch 0/173, loss: 29.65106296539307
+epoch: 13/19, batch 10/173, loss: 30.713083267211925
+epoch: 13/19, batch 20/173, loss: 50.80386848449707
+epoch: 13/19, batch 30/173, loss: 136.90401105880738
+epoch: 13/19, batch 40/173, loss: 70.17413053512573
+epoch: 13/19, batch 50/173, loss: 47.21149940490722
+epoch: 13/19, batch 60/173, loss: 45.241845703124994
+epoch: 13/19, batch 70/173, loss: 51.61686205863954
+epoch: 13/19, batch 80/173, loss: 20.63218059539795
+epoch: 13/19, batch 90/173, loss: 59.16786680221558
+epoch: 13/19, batch 100/173, loss: 51.76376991271971
+epoch: 13/19, batch 110/173, loss: 41.91846027374268
+epoch: 13/19, batch 120/173, loss: 46.47843980789183
+Traceback (most recent call last):
+  File "/home/lts5-ts/Documents/ahmed/bmai_ahmed/demo_bmai.py", line 50, in <module>
+    main(args)
+  File "/home/lts5-ts/Documents/ahmed/bmai_ahmed/demo_bmai.py", line 43, in main
+    mean_training_loss = trainer.train(args.epochs)
+  File "/home/lts5-ts/Documents/ahmed/bmai_ahmed/trainer_bmai_2.py", line 126, in train
+    for batch_idx, data in enumerate(self.train_dataloader):
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/torch/utils/data/dataloader.py", line 521, in __next__
+    data = self._next_data()
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/torch/utils/data/dataloader.py", line 561, in _next_data
+    data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/torch/utils/data/_utils/fetch.py", line 44, in fetch
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/torch/utils/data/_utils/fetch.py", line 44, in <listcomp>
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/torch/utils/data/dataset.py", line 311, in __getitem__
+    return self.dataset[self.indices[idx]]
+  File "/home/lts5-ts/Documents/ahmed/bmai_ahmed/prepare_dataset.py", line 64, in __getitem__
+    img = io.imread(new_path)
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/skimage/io/_io.py", line 48, in imread
+    img = call_plugin('imread', fname, plugin=plugin, **plugin_args)
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/skimage/io/manage_plugins.py", line 207, in call_plugin
+    return func(*args, **kwargs)
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/skimage/io/_plugins/imageio_plugin.py", line 10, in imread
+    return np.asarray(imageio_imread(*args, **kwargs))
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/imageio/core/functions.py", line 265, in imread
+    reader = read(uri, format, "i", **kwargs)
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/imageio/core/functions.py", line 186, in get_reader
+    return format.get_reader(request)
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/imageio/core/format.py", line 170, in get_reader
+    return self.Reader(self, request)
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/imageio/core/format.py", line 221, in __init__
+    self._open(**self.request.kwargs.copy())
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/imageio/plugins/pillow.py", line 429, in _open
+    return PillowFormat.Reader._open(self, pilmode=pilmode, as_gray=as_gray)
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/imageio/plugins/pillow.py", line 135, in _open
+    pil_try_read(self._im)
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/imageio/plugins/pillow.py", line 669, in pil_try_read
+    im.getdata()[0]
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/PIL/Image.py", line 1292, in getdata
+    self.load()
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/PIL/ImageFile.py", line 255, in load
+    n, err_code = decoder.decode(b)

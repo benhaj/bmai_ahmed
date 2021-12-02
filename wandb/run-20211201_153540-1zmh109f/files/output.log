@@ -1,0 +1,37 @@
+Downloading: "https://download.pytorch.org/models/mobilenet_v2-b0353104.pth" to /home/lts5-ts/.cache/torch/hub/checkpoints/mobilenet_v2-b0353104.pth
+100%|██████████████████████████████████████████████████████████████████████████████| 13.6M/13.6M [00:01<00:00, 11.7MB/s]
+Traceback (most recent call last):
+  File "/home/lts5-ts/Documents/ahmed/bmai_ahmed/demo_bmai.py", line 50, in <module>
+    main(args)
+  File "/home/lts5-ts/Documents/ahmed/bmai_ahmed/demo_bmai.py", line 43, in main
+    mean_training_loss = trainer.train(args.epochs)
+  File "/home/lts5-ts/Documents/ahmed/bmai_ahmed/trainer_bmai_2.py", line 126, in train
+    for batch_idx, data in enumerate(self.train_dataloader):
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/torch/utils/data/dataloader.py", line 521, in __next__
+    data = self._next_data()
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/torch/utils/data/dataloader.py", line 561, in _next_data
+    data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/torch/utils/data/_utils/fetch.py", line 44, in fetch
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/torch/utils/data/_utils/fetch.py", line 44, in <listcomp>
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/torch/utils/data/dataset.py", line 311, in __getitem__
+    return self.dataset[self.indices[idx]]
+  File "/home/lts5-ts/Documents/ahmed/bmai_ahmed/prepare_dataset.py", line 63, in __getitem__
+    img = io.imread(img_path)
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/skimage/io/_io.py", line 48, in imread
+    img = call_plugin('imread', fname, plugin=plugin, **plugin_args)
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/skimage/io/manage_plugins.py", line 207, in call_plugin
+    return func(*args, **kwargs)
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/skimage/io/_plugins/imageio_plugin.py", line 10, in imread
+    return np.asarray(imageio_imread(*args, **kwargs))
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/imageio/core/functions.py", line 265, in imread
+    reader = read(uri, format, "i", **kwargs)
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/imageio/core/functions.py", line 172, in get_reader
+    request = Request(uri, "r" + mode, **kwargs)
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/imageio/core/request.py", line 124, in __init__
+    self._parse_uri(uri)
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/imageio/core/request.py", line 260, in _parse_uri
+    raise FileNotFoundError("No such file: '%s'" % fn)
+FileNotFoundError: No such file: '/home/lts5-ts/Documents/ahmed/bmai_ahmed/data/guinee/GN_7cd832e_20191011_c234346_Mari.jpeg'
+About to train for 1 epochs

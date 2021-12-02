@@ -1,0 +1,43 @@
+
+cuda
+About to train for 5 epochs
+epoch: 0/4, batch 0/19, loss: 1686.0140995369852
+epoch: 0/4, batch 10/19, loss: 339.2423515701294
+for epoch 0 , average loss is 565.9695980620459
+About to test
+Average test loss is 415.88821177291874
+mean_height_rel_error = 0.09972123730331119
+mean_weight_rel_error = 0.09972123730331119
+epoch: 1/4, batch 0/19, loss: 445.02692485809325
+epoch: 1/4, batch 10/19, loss: 241.29154755115508
+for epoch 1 , average loss is 227.7698534515514
+About to test
+Average test loss is 333.8009930152893
+mean_height_rel_error = 0.09606069183896379
+mean_weight_rel_error = 0.09606069183896379
+epoch: 2/4, batch 0/19, loss: 317.25445423126223
+Traceback (most recent call last):
+  File "/home/lts5-ts/Documents/ahmed/bmai_ahmed/demo_bmai.py", line 53, in <module>
+    main(args)
+  File "/home/lts5-ts/Documents/ahmed/bmai_ahmed/demo_bmai.py", line 44, in main
+    results,mean_training_loss = trainer.train(args.epochs)
+  File "/home/lts5-ts/Documents/ahmed/bmai_ahmed/trainer_bmai_2.py", line 128, in train
+    for batch_idx, data in enumerate(self.train_dataloader):
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/torch/utils/data/dataloader.py", line 521, in __next__
+    data = self._next_data()
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/torch/utils/data/dataloader.py", line 561, in _next_data
+    data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/torch/utils/data/_utils/fetch.py", line 44, in fetch
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/torch/utils/data/_utils/fetch.py", line 44, in <listcomp>
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/torch/utils/data/dataset.py", line 311, in __getitem__
+    return self.dataset[self.indices[idx]]
+  File "/home/lts5-ts/Documents/ahmed/bmai_ahmed/prepare_dataset.py", line 76, in __getitem__
+    img=self.transform(img.copy())
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/torchvision/transforms/transforms.py", line 60, in __call__
+    img = t(img)
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/torchvision/transforms/transforms.py", line 97, in __call__
+    return F.to_tensor(pic)
+  File "/home/lts5-ts/anaconda3/envs/pycolo/lib/python3.9/site-packages/torchvision/transforms/functional.py", line 117, in to_tensor
+    return img.to(dtype=default_float_dtype).div(255)
