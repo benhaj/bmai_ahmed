@@ -18,6 +18,7 @@ def get_args_parser():
     parser.add_argument('--model_name', default='mobilenet', type=str,
                         help='model to use')
     parser.add_argument('--data_name', type=str, default='guinee', help='dataset to use (either "guinee" or "cambodge")')
+    parser.add_argument('--img_size',type=int,default=256,help='size of images (either 256 or 386)')
     parser.add_argument('--SEXE', type=bool, default=False, help='use sexe attribute ?')
     parser.add_argument('--AGE', type=bool, default=False, help='use age attribute ?')
     parser.add_argument('--epochs', type=int, default=15, help='how many training epochs')
@@ -38,15 +39,15 @@ def main(args):
     # TRANSFORMS :
     transforms = prepare_transforms()
     if args.data_name == 'guinee':
-        dataset = bmaiDataset(csv_file='/hdd/data/bmai_clean/full_guinee_data.csv',transform=transforms,use_csv=True)
+        dataset = bmaiDataset(csv_file='/hdd/data/bmai_clean/full_guinee_data.csv',img_size=args.img_size,transform=transforms)
     else:
-        dataset = bmaiDataset(csv_file='/hdd/data/bmai_clean/full_cambodge_data.csv',transform=transforms,use_csv=True)
+        dataset = bmaiDataset(csv_file='/hdd/data/bmai_clean/full_cambodge_data.csv',img_size=args.img_size,transform=transforms)
         
     ## Trainer:
-    trainer = BmaiTrainer(model, dataset, AGE=args.AGE, SEXE=args.SEXE, batch_size=args.batch_size, lr = args.lr, num_workers=args.num_workers)
+    trainer = BmaiTrainer(model, dataset, img_size=args.img_size, AGE=args.AGE, SEXE=args.SEXE, batch_size=args.batch_size, lr = args.lr, num_workers=args.num_workers)
     results,mean_training_loss = trainer.train(args.epochs)
-    torch.save(model,f'{args.model_name}_{args.data_name}_SEXE_{args.SEXE}_AGE_{args.AGE}_{args.epochs}_epochs.pt')
-    results.to_csv(f'{args.model_name}_{args.data_name}_SEXE_{args.SEXE}_AGE_{args.AGE}_{args.epochs}_epochs.csv')
+    torch.save(model,f'{args.model_name}_{args.data_name}_{args.img_size}_SEXE_{args.SEXE}_AGE_{args.AGE}_{args.epochs}_epochs.pt')
+    results.to_csv(f'{args.model_name}_{args.data_name}_{args.img_size}_SEXE_{args.SEXE}_AGE_{args.AGE}_{args.epochs}_epochs.csv')
     #y_true,predictions,average_loss = trainer.test()
 
 if __name__ == '__main__':

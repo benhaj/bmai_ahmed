@@ -34,42 +34,38 @@ class bmaiDataset(Dataset):
                     
  
     """
-    def __init__(self, csv_file = None , images = None, labels=None,transform = None,use_csv=False):
+    def __init__(self, csv_file = None , img_size = 256 , transform = None):
         
         ## annotations in form ['img',sexe','days','height','weight']
-        self.use_csv = use_csv
-        if self.use_csv:
-            self.annotations = pd.read_csv(csv_file)
-            ## to normalize days/age
-            self.age_mean = self.annotations.iloc[:,2].values.mean()
-            self.age_std = self.annotations.iloc[:,2].values.std()
-            self.length = len(self.annotations)
-        else:
-            self.images = images
-            self.labels = labels
-            self.length = len(images)
         
+        
+        self.annotations = pd.read_csv(csv_file)
+        ## to normalize days/age
+        self.age_mean = self.annotations.iloc[:,2].values.mean()
+        self.age_std = self.annotations.iloc[:,2].values.std()
+                    
         self.transform = transform
+        self.img_size=img_size
 
         
 
     def __len__(self):
-        return self.length
+        return len(self.annotations)
 
     def __getitem__(self, index):
         ## ['img',sexe','days','height','weight']
-        if self.use_csv:
-            img_path = self.annotations.iloc[index, 0]#.values[0]
-            new_path = "/hdd/data/" + img_path.replace('data','bmai_clean',1)
-            img = io.imread(new_path)
+        
+        img_path = self.annotations.iloc[index, 0]#.values[0]
+        img_path = "/hdd/data/" + img_path.replace('data','bmai_clean',1)
+        
+        new_path = prepare_new_path(img_path,self.img_size)
+        img = io.imread(new_path)
             
-            sexe = self.annotations.iloc[index, 1]
-            days = (self.annotations.iloc[index,2] - self.age_mean) / self.age_std
-            height_weight = self.annotations.iloc[index,3:].values.astype(float)
-            y_label = torch.tensor(np.hstack([sexe,days,height_weight]))
-        else:
-            img = self.images[index]
-            y_label = self.labels[index].astype(float)
+        sexe = self.annotations.iloc[index, 1]
+        days = (self.annotations.iloc[index,2] - self.age_mean) / self.age_std
+        height_weight = self.annotations.iloc[index,3:].values.astype(float)
+        y_label = torch.tensor(np.hstack([sexe,days,height_weight]))
+        
             
 
         if self.transform:
@@ -142,8 +138,17 @@ class Pad(object):
 def prepare_transforms(img_mean=IMG_MEAN,img_std=1):
     normalization = transforms.Normalize(IMG_MEAN,1)
     composed = transforms.Compose([transforms.ToTensor(),
-                                   normalization,
-                                   transforms.Resize((HEIGHT_SIZE,HEIGHT_SIZE)),
-                               Pad(stride=8, pad_value=(0, 0, 0))
-                              ])
+                                   normalization])
+    #                               transforms.Resize((HEIGHT_SIZE,HEIGHT_SIZE)),
+    #                           Pad(stride=8, pad_value=(0, 0, 0))
+    #                          ])
     return composed
+
+
+def prepare_new_path(path,size):
+    splitted = path.split('.')
+    if len(splitted)!=2:
+        new_path = f'{splitted[0]}.{splitted[1]}_{size}.{splitted[2]}'
+    else:
+        new_path = f'{splitted[0]}_{size}.{splitted[1]}'
+    return new_path

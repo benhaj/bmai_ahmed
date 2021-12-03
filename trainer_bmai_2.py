@@ -13,7 +13,7 @@ wandb.init(project="new-sota-model")
 
 
 class BmaiTrainer:
-    def __init__(self, model, dataset, AGE=False, SEXE=False, train_size=0.8, lr = 0.005, batch_size=32, num_workers=10 ):
+    def __init__(self, model, dataset,img_size=256 ,AGE=False, SEXE=False, train_size=0.8, lr = 0.005, batch_size=32, num_workers=10 ):
         """
         Initializes the class Kather19Trainer which inherits from the parent class Trainer. The class implements a
         convenient way to log training metrics and train over multiple sessions.
@@ -32,42 +32,52 @@ class BmaiTrainer:
         self.device = ('cuda' if torch.cuda.is_available() else 'cpu')
         print(self.device)
         # Model
+        self.img_size = img_size
         if model.name == 'mobilenet_v2':
-          # Freeze parameters
-          for param in model.parameters():
-              param.requires_grad = False
+            # Freeze parameters
+            for param in model.parameters():
+                param.requires_grad = False
 
-          # Instantiate new fully connected layer
-          model.classifier = nn.Sequential(
-              nn.Flatten(),
-              nn.Dropout(p=0.2),
-              nn.Linear(in_features=1280*8*8, out_features=256),
-              nn.ReLU()
-          )
-          if AGE and SEXE:
-            model.last = nn.Sequential(
-                nn.Linear(in_features=256+2,out_features=128),
-                nn.ReLU(),
-                nn.Linear(128,32),
-                nn.ReLU(),
-                nn.Linear(32,2)
-            )
-          elif AGE or SEXE:
-            model.last = nn.Sequential(
-                nn.Linear(in_features=256+1,out_features=128),
-                nn.ReLU(),
-                nn.Linear(128,32),
-                nn.ReLU(),
-                nn.Linear(32,2)
-            )
-          else:
-            model.last = nn.Sequential(
-                nn.Linear(in_features=256+0,out_features=128),
-                nn.ReLU(),
-                nn.Linear(128,32),
-                nn.ReLU(),
-                nn.Linear(32,2)
-            )
+            # Instantiate new fully connected layer
+            if self.img_size==256:
+                model.classifier = nn.Sequential(
+                    nn.Flatten(),
+                    nn.Dropout(p=0.2),
+                    nn.Linear(in_features=1280*8*8, out_features=256),
+                    nn.ReLU()
+                )
+            else:
+                model.classifier = nn.Sequential(
+                    nn.Flatten(),
+                    nn.Dropout(p=0.2),
+                    nn.Linear(in_features=1280*12*12, out_features=256),
+                    nn.ReLU()
+                )
+            
+            if AGE and SEXE:
+                model.last = nn.Sequential(
+                    nn.Linear(in_features=256+2,out_features=128),
+                    nn.ReLU(),
+                    nn.Linear(128,32),
+                    nn.ReLU(),
+                    nn.Linear(32,2)
+                )
+            elif AGE or SEXE:
+                model.last = nn.Sequential(
+                    nn.Linear(in_features=256+1,out_features=128),
+                    nn.ReLU(),
+                    nn.Linear(128,32),
+                    nn.ReLU(),
+                    nn.Linear(32,2)
+                )
+            else:
+                model.last = nn.Sequential(
+                    nn.Linear(in_features=256+0,out_features=128),
+                    nn.ReLU(),
+                    nn.Linear(128,32),
+                    nn.ReLU(),
+                    nn.Linear(32,2)
+                )
 
         self.model = model.to(self.device)
         
@@ -275,7 +285,7 @@ class BmaiTrainer:
         
         mean_height_rel_error,mean_weight_rel_error = calculate_mean_absolute_error_results(y_true,predictions)
         print(f'mean_height_rel_error = {mean_height_rel_error}')
-        print(f'mean_weight_rel_error = {mean_height_rel_error}')
+        print(f'mean_weight_rel_error = {mean_weight_rel_error}')
         
         wandb.log({'epoch':epoch_num,'epoch_test_loss':average_loss, 'mean_height_rel_error':mean_height_rel_error, 'mean_weight_rel_error':mean_weight_rel_error})
 
