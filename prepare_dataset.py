@@ -39,7 +39,13 @@ class bmaiDataset(Dataset):
         ## annotations in form ['img',sexe','days','height','weight']
         
         
-        self.annotations = pd.read_csv(csv_file)
+        if len(csv_file)==1:
+            self.annotations = pd.read_csv(csv_file[0])
+        else: ## len(csv_file)==2 (guinee + cambodge)
+            annotations_1 = pd.read_csv(csv_file[0])
+            annotations_2 = pd.read_csv(csv_file[1])
+            self.annotations = pd.concat([annotations_1,annotations_2],ignore_index=True)
+            
         ## to normalize days/age
         self.age_mean = self.annotations.iloc[:,2].values.mean()
         self.age_std = self.annotations.iloc[:,2].values.std()
@@ -152,3 +158,18 @@ def prepare_new_path(path,size):
     else:
         new_path = f'{splitted[0]}_{size}.{splitted[1]}'
     return new_path
+
+
+def create_df_entry(args,best):
+    entry = {
+        'data':args.data_name,
+        'img_size':args.img_size,
+        'sexe':args.SEXE,
+        'age':args.AGE,
+        'seed':args.SEED,
+        'epochs':args.epochs,
+        'lr':args.learning,
+        'height_rel_err':best[0],
+        'weight_rel_err':best[1]
+    }
+    return entry

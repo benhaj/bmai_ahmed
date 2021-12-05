@@ -28,7 +28,7 @@ total_length = len(df_guinee)+len(df_cambodge)
 # In[92]:
 
 
-for HEIGHT_SIZE in HEIGHTS:
+for HEIGHT_SIZE in HEIGHTS[1:]:
     composed = transforms.Compose([transforms.ToTensor(),
                                transforms.Resize((HEIGHT_SIZE,HEIGHT_SIZE)),
                                Pad(stride=8, pad_value=(0, 0, 0))
@@ -36,7 +36,7 @@ for HEIGHT_SIZE in HEIGHTS:
 
     print(f'Processing for size {HEIGHT_SIZE} ..')
     i = 0
-    for df in dfs[1:]:
+    for df in dfs[:1]:
         for img_path_ in df.img.values:
             i=i+1
 

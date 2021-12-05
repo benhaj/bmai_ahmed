@@ -18,9 +18,10 @@ def get_args_parser():
     parser.add_argument('--model_name', default='mobilenet', type=str,
                         help='model to use')
     parser.add_argument('--data_name', type=str, default='guinee', help='dataset to use (either "guinee" or "cambodge")')
+    parser.add_argument('--SEED',type=int,default=0,help='SEED to perform validation')
     parser.add_argument('--img_size',type=int,default=256,help='size of images (either 256 or 386)')
-    parser.add_argument('--SEXE', type=bool, default=False, help='use sexe attribute ?')
-    parser.add_argument('--AGE', type=bool, default=False, help='use age attribute ?')
+    parser.add_argument('--SEXE', type=str, default='False', help='use sexe attribute ?')
+    parser.add_argument('--AGE', type=str, default='False', help='use age attribute ?')
     parser.add_argument('--epochs', type=int, default=15, help='how many training epochs')
     parser.add_argument('--lr',type=float,default=0.005,help='learning rate')
     parser.add_argument('--batch_size',type=int,default=32,help='batch size')
@@ -29,7 +30,18 @@ def get_args_parser():
 
 
 def main(args):
-    
+    print(args.SEXE)
+    print(args.AGE)
+    if (args.SEXE == 'False'):
+        SEXE = False
+    else:
+        SEXE = True
+
+    if (args.AGE == 'False'):
+        AGE = False
+    else:
+        AGE = True
+
     ## Model
     if args.model_name == 'mobilenet':
         model = torchvision.models.mobilenet_v2(pretrained=True)
@@ -39,15 +51,24 @@ def main(args):
     # TRANSFORMS :
     transforms = prepare_transforms()
     if args.data_name == 'guinee':
-        dataset = bmaiDataset(csv_file='/hdd/data/bmai_clean/full_guinee_data.csv',img_size=args.img_size,transform=transforms)
+        dataset = bmaiDataset(csv_file=['/hdd/data/bmai_clean/full_guinee_data.csv'],img_size=args.img_size,transform=transforms)
+    elif args.data_name == 'cambodge':
+        dataset = bmaiDataset(csv_file=['/hdd/data/bmai_clean/full_cambodge_data.csv'],img_size=args.img_size,transform=transforms)
     else:
-        dataset = bmaiDataset(csv_file='/hdd/data/bmai_clean/full_cambodge_data.csv',img_size=args.img_size,transform=transforms)
+        dataset = bmaiDataset(csv_file=['/hdd/data/bmai_clean/full_guinee_data.csv','/hdd/data/bmai_clean/full_cambodge_data.csv'],img_size=args.img_size,transform=transforms)
         
     ## Trainer:
-    trainer = BmaiTrainer(model, dataset, img_size=args.img_size, AGE=args.AGE, SEXE=args.SEXE, batch_size=args.batch_size, lr = args.lr, num_workers=args.num_workers)
-    results,mean_training_loss = trainer.train(args.epochs)
-    torch.save(model,f'{args.model_name}_{args.data_name}_{args.img_size}_SEXE_{args.SEXE}_AGE_{args.AGE}_{args.epochs}_epochs.pt')
-    results.to_csv(f'{args.model_name}_{args.data_name}_{args.img_size}_SEXE_{args.SEXE}_AGE_{args.AGE}_{args.epochs}_epochs.csv')
+    #wandb initialization
+    run_name = f'{args.model_name}_{args.data_name}_SEED{args.SEED}_{args.img_size}_SEXE_{SEXE}_AGE_{AGE}_{args.epochs}_epochs_lr_{args.lr}'
+    wandb.init(project="new-sota-model",name=run_name)
+
+    trainer = BmaiTrainer(model, dataset, seed=args.SEED, img_size=args.img_size, AGE=AGE, SEXE=SEXE, batch_size=args.batch_size, lr = args.lr, epochs=args.epochs, num_workers=args.num_workers)
+    best_ , results,mean_training_loss = trainer.train()
+    torch.save(trainer.model,f'results/{run_name}.pt')
+    results.to_csv(f'results/{run_name}.csv',index=False)
+
+    summary_df = pd.DataFrame(create_df_entry(args,best_))
+    summary_df.to_csv(f'results/full_results.csv.csv', mode='a', header=False,index=False)
     #y_true,predictions,average_loss = trainer.test()
 
 if __name__ == '__main__':

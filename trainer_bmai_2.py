@@ -8,12 +8,10 @@ import pandas as pd
 import wandb
 
 # start a new experiment
-wandb.init(project="new-sota-model")
-
 
 
 class BmaiTrainer:
-    def __init__(self, model, dataset,img_size=256 ,AGE=False, SEXE=False, train_size=0.8, lr = 0.005, batch_size=32, num_workers=10 ):
+    def __init__(self, model, dataset, seed = 0,img_size=256 ,AGE=False, SEXE=False, train_size=0.8, lr = 0.005, epochs = 20, batch_size=32, num_workers=10 ):
         """
         Initializes the class Kather19Trainer which inherits from the parent class Trainer. The class implements a
         convenient way to log training metrics and train over multiple sessions.
@@ -31,6 +29,7 @@ class BmaiTrainer:
         # Device
         self.device = ('cuda' if torch.cuda.is_available() else 'cpu')
         print(self.device)
+
         # Model
         self.img_size = img_size
         if model.name == 'mobilenet_v2':
@@ -84,17 +83,20 @@ class BmaiTrainer:
         # Learning rate
         self.lr = lr
 
+        self.epochs = epochs
+
         # Data generators
         self.dataset = dataset
         self.AGE = AGE
         self.SEXE = SEXE
         
         # Split data (train/test)
+        self.seed = seed
         self.train_size = train_size
         
         num_train_entries = int(self.train_size * len(self.dataset))
         num_test_entries = len(self.dataset) - num_train_entries
-        train_dataset, test_dataset = torch.utils.data.random_split(self.dataset, [num_train_entries, num_test_entries])
+        train_dataset, test_dataset = torch.utils.data.random_split(self.dataset, [num_train_entries, num_test_entries],generator=torch.Generator().manual_seed(self.seed))
         
         # Data loaders :
         self.batch_size = batch_size
@@ -114,28 +116,32 @@ class BmaiTrainer:
         return torch.where(diff < (0.05*y_true),torch.zeros(1, 2,dtype=float).to(self.device),diff)
 
     
-    def train(self, epochs):
+    def train(self):
         """
         :param epochs: number of iterations over the training dataset to perform.
         :return: None.
         """
         AGE = self.AGE
         SEXE = self.SEXE
-        print(f'About to train for {epochs} epochs')
+
+        print(AGE)
+        print(SEXE)
+        
+        print(f'About to train for {self.epochs} epochs')
         model = self.model
         model.train()
         ## create optimizer
         optimizer = optim.Adam(model.parameters(),lr=self.lr)
         
         # capture a dictionary of hyperparameters with config
-        wandb.config = {"learning_rate": self.lr, "epochs": epochs, "batch_size": self.batch_size}
+        wandb.config = {"learning_rate": self.lr, "epochs": self.epochs, "batch_size": self.batch_size}
         # optional: track gradients
         wandb.watch(model)
 
 
         results = pd.DataFrame(columns=['mean_height_rel_error','mean_weight_rel_error'])
         epoch_losses=[]
-        for epoch in range(epochs):
+        for epoch in range(self.epochs):
 
             batch_losses = []
             for batch_idx, data in enumerate(self.train_dataloader):
@@ -195,7 +201,7 @@ class BmaiTrainer:
                 batch_losses.append(loss.item())
                 # Display status
                 if batch_idx % 10 == 0:
-                    message = f'epoch: {epoch}/{epochs-1}, batch {batch_idx}/{len(self.train_dataloader)-1}, loss: {loss.item()}' 
+                    message = f'epoch: {epoch}/{self.epochs-1}, batch {batch_idx}/{len(self.train_dataloader)-1}, loss: {loss.item()}' 
                     print(message)
             epoch_loss = np.mean(batch_losses)
             
@@ -209,7 +215,9 @@ class BmaiTrainer:
 
             results.loc[epoch] = [mean_height_rel_error,mean_weight_rel_error]
 
-        return results, np.mean(epoch_losses)
+        best_rel_err = (results.mean_height_rel_error.min(),results.mean_weight_rel_error.min())
+
+        return best_rel_err, results, np.mean(epoch_losses)
     
     
     def test(self,epoch_num):
