@@ -30,8 +30,7 @@ def get_args_parser():
 
 
 def main(args):
-    print(args.SEXE)
-    print(args.AGE)
+
     if (args.SEXE == 'False'):
         SEXE = False
     else:
@@ -41,6 +40,9 @@ def main(args):
         AGE = False
     else:
         AGE = True
+
+    print(AGE)
+    print(SEXE)
 
     ## Model
     if args.model_name == 'mobilenet':
@@ -67,8 +69,8 @@ def main(args):
     torch.save(trainer.model,f'results/{run_name}.pt')
     results.to_csv(f'results/{run_name}.csv',index=False)
 
-    summary_df = pd.DataFrame(create_df_entry(args,best_))
-    summary_df.to_csv(f'results/full_results.csv.csv', mode='a', header=False,index=False)
+    summary_df = pd.json_normalize(create_df_entry(args,best_))
+    summary_df.to_csv(f'results/full_results.csv', mode='a', header=False,index=False)
     #y_true,predictions,average_loss = trainer.test()
 
 if __name__ == '__main__':

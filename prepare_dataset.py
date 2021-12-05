@@ -168,7 +168,7 @@ def create_df_entry(args,best):
         'age':args.AGE,
         'seed':args.SEED,
         'epochs':args.epochs,
-        'lr':args.learning,
+        'lr':args.lr,
         'height_rel_err':best[0],
         'weight_rel_err':best[1]
     }

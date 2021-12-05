@@ -186,7 +186,9 @@ class BmaiTrainer:
                     
                 else:
                     target = target[:,2:].to(self.device)
-                    scores = model(imgs)
+                    feat = model.features(imgs)
+                    classi = model.classifier(feat)
+                    scores = model.last(classi)
                 
                 # loss
                 loss = self.loss_fn(scores,target).sum()
@@ -274,7 +276,9 @@ class BmaiTrainer:
 
             else:
                 target = target[:,2:].to(self.device)
-                scores = model(imgs)
+                feat = model.features(imgs)
+                classi = model.classifier(feat)
+                scores = model.last(classi)
 
             y_true.append(target.detach().numpy() if self.device=='cpu' else target.cpu().detach().numpy())
             predictions.append(scores.detach().numpy() if self.device=='cpu' else scores.cpu().detach().numpy())
