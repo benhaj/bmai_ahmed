@@ -5,16 +5,16 @@
 import os
 import pandas as pd
 
-pd.DataFrame(columns=[
-        'data',
-        'img_size',
-        'sexe',
-        'age',
-        'seed',
-        'epochs',
-        'lr',
-        'height_rel_err',
-        'weight_rel_err']).to_csv('results/full_results.csv',index=False)
+#pd.DataFrame(columns=[
+#        'data',
+#        'img_size',
+#        'sexe',
+#        'age',
+#        'seed',
+#        'epochs',
+#        'lr',
+#        'height_rel_err',
+#        'weight_rel_err']).to_csv('results/full_results.csv',index=False)
 
 
 data = ['guinee','cambodge','guinee_cambodge']
@@ -23,7 +23,7 @@ SEXEs =['False','True']
 
 IMG_SIZEs = [256,384]
 
-for data_name in data[2:]:
+for data_name in data[:2]:
     for img_size in IMG_SIZEs:
         for AGE in AGEs:
             for SEXE in SEXEs:
