@@ -114,7 +114,7 @@ class BmaiTrainer:
                     if model.name == 'mobilenet_v2':
                         if self.method_sex_age == 4 :
                             scores = model.last(model.classifier(model.features(imgs)))
-                            mean_h_w = model.mean_prediction(age,sexe)
+                            mean_h_w = model.mean_prediction(torch.cat([age.float(),sexe.float()],dim=1))
                         else:
                             feat = model.classifier(model.features(imgs))
                             concat = torch.cat([feat,sexe,age],dim=1).float()
@@ -212,7 +212,7 @@ class BmaiTrainer:
                     if model.name == 'mobilenet_v2':
                         if self.method_sex_age == 4 :
                             scores = model.last(model.classifier(model.features(imgs)))
-                            mean_h_w = model.mean_prediction(age,sexe)
+                            mean_h_w = model.mean_prediction(torch.cat([age.float(),sexe.float()],dim=1))
                         else:
                             feat = model.classifier(model.features(imgs))
                             concat = torch.cat([feat,sexe,age],dim=1).float()
