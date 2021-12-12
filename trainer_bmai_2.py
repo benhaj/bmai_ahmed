@@ -43,38 +43,47 @@ class BmaiTrainer:
                     nn.Flatten(),
                     nn.Dropout(p=0.2),
                     nn.Linear(in_features=1280*8*8, out_features=256),
+                    nn.ReLU(),
+                    nn.Linear(in_features=256,out_features=128),
+                    nn.ReLU(),
+                    nn.Linear(128,32),
                     nn.ReLU()
+
                 )
             else:
                 model.classifier = nn.Sequential(
                     nn.Flatten(),
                     nn.Dropout(p=0.2),
                     nn.Linear(in_features=1280*12*12, out_features=256),
+                    nn.ReLU(),
+                    nn.Linear(in_features=256,out_features=128),
+                    nn.ReLU(),
+                    nn.Linear(128,32),
                     nn.ReLU()
                 )
             
             if AGE and SEXE:
                 model.last = nn.Sequential(
-                    nn.Linear(in_features=256+2,out_features=128),
-                    nn.ReLU(),
-                    nn.Linear(128,32),
-                    nn.ReLU(),
-                    nn.Linear(32,2)
+                    #nn.Linear(in_features=256+2,out_features=128),
+                    #nn.ReLU(),
+                    #nn.Linear(128,32),
+                    #nn.ReLU(),
+                    nn.Linear(32+2,2)
                 )
             elif AGE or SEXE:
                 model.last = nn.Sequential(
-                    nn.Linear(in_features=256+1,out_features=128),
-                    nn.ReLU(),
-                    nn.Linear(128,32),
-                    nn.ReLU(),
-                    nn.Linear(32,2)
+                    #nn.Linear(in_features=256+1,out_features=128),
+                    #nn.ReLU(),
+                    #nn.Linear(128,32),
+                    #nn.ReLU(),
+                    nn.Linear(32+1,2)
                 )
             else:
                 model.last = nn.Sequential(
-                    nn.Linear(in_features=256+0,out_features=128),
-                    nn.ReLU(),
-                    nn.Linear(128,32),
-                    nn.ReLU(),
+                    #nn.Linear(in_features=256+0,out_features=128),
+                    #nn.ReLU(),
+                    #nn.Linear(128,32),
+                    #nn.ReLU(),
                     nn.Linear(32,2)
                 )
 
