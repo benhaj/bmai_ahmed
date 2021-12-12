@@ -11,7 +11,7 @@ import wandb
 
 
 class BmaiTrainer:
-    def __init__(self, model, dataset, seed = 0,img_size=256 ,AGE=False, SEXE=False, train_size=0.8, lr = 0.005, epochs = 20, batch_size=32, num_workers=10 ):
+    def __init__(self, model, dataset, seed = 0,img_size=256 ,AGE=False, SEXE=False,method_sex_age= 0, train_size=0.8, lr = 0.005, epochs = 20, batch_size=32, num_workers=10 ):
         """
         Initializes the class Kather19Trainer which inherits from the parent class Trainer. The class implements a
         convenient way to log training metrics and train over multiple sessions.
@@ -30,64 +30,10 @@ class BmaiTrainer:
         self.device = ('cuda' if torch.cuda.is_available() else 'cpu')
         print(self.device)
 
-        # Model
+        # img size and model
         self.img_size = img_size
-        if model.name == 'mobilenet_v2':
-            # Freeze parameters
-            for param in model.parameters():
-                param.requires_grad = False
-
-            # Instantiate new fully connected layer
-            if self.img_size==256:
-                model.classifier = nn.Sequential(
-                    nn.Flatten(),
-                    nn.Dropout(p=0.2),
-                    nn.Linear(in_features=1280*8*8, out_features=256),
-                    nn.ReLU(),
-                    nn.Linear(in_features=256,out_features=128),
-                    nn.ReLU(),
-                    nn.Linear(128,32),
-                    nn.ReLU()
-
-                )
-            else:
-                model.classifier = nn.Sequential(
-                    nn.Flatten(),
-                    nn.Dropout(p=0.2),
-                    nn.Linear(in_features=1280*12*12, out_features=256),
-                    nn.ReLU(),
-                    nn.Linear(in_features=256,out_features=128),
-                    nn.ReLU(),
-                    nn.Linear(128,32),
-                    nn.ReLU()
-                )
-            
-            if AGE and SEXE:
-                model.last = nn.Sequential(
-                    #nn.Linear(in_features=256+2,out_features=128),
-                    #nn.ReLU(),
-                    #nn.Linear(128,32),
-                    #nn.ReLU(),
-                    nn.Linear(32+2,2)
-                )
-            elif AGE or SEXE:
-                model.last = nn.Sequential(
-                    #nn.Linear(in_features=256+1,out_features=128),
-                    #nn.ReLU(),
-                    #nn.Linear(128,32),
-                    #nn.ReLU(),
-                    nn.Linear(32+1,2)
-                )
-            else:
-                model.last = nn.Sequential(
-                    #nn.Linear(in_features=256+0,out_features=128),
-                    #nn.ReLU(),
-                    #nn.Linear(128,32),
-                    #nn.ReLU(),
-                    nn.Linear(32,2)
-                )
-
         self.model = model.to(self.device)
+        self.method_sex_age = method_sex_age
         
         # Learning rate
         self.lr = lr
@@ -133,9 +79,6 @@ class BmaiTrainer:
         AGE = self.AGE
         SEXE = self.SEXE
 
-        print(AGE)
-        print(SEXE)
-        
         print(f'About to train for {self.epochs} epochs')
         model = self.model
         model.train()
@@ -150,6 +93,8 @@ class BmaiTrainer:
 
         results = pd.DataFrame(columns=['mean_height_rel_error','mean_weight_rel_error'])
         epoch_losses=[]
+        
+        
         for epoch in range(self.epochs):
 
             batch_losses = []
@@ -167,11 +112,15 @@ class BmaiTrainer:
                     age = target[:,1].reshape((num_elems_in_batch,1)).to(self.device)
                     target = target[:,2:].to(self.device)
                     if model.name == 'mobilenet_v2':
-                      feat = model.classifier(model.features(imgs))
-                      concat = torch.cat([feat,sexe,age],dim=1).float()
-                      scores = model.last(concat)
+                        if self.method_sex_age == 4 :
+                            scores = model.last(model.classifier(model.features(imgs)))
+                            mean_h_w = model.mean_prediction(age,sexe)
+                        else:
+                            feat = model.classifier(model.features(imgs))
+                            concat = torch.cat([feat,sexe,age],dim=1).float()
+                            scores = model.last(concat)
                     else:
-                      scores = model(imgs,sexe,age)
+                        scores = model(imgs,sexe,age)
                     
                 elif AGE:
                     age = target[:,0].reshape((num_elems_in_batch,1)).to(self.device)
@@ -200,6 +149,9 @@ class BmaiTrainer:
                     scores = model.last(classi)
                 
                 # loss
+                if self.method_sex_age == 4 :
+                    scores = torch.add(scores, mean_h_w)
+                
                 loss = self.loss_fn(scores,target).sum()
                 
                 # backward
@@ -252,17 +204,21 @@ class BmaiTrainer:
             imgs = data[0].to(self.device)
             target = data[1:][0]
             num_elems_in_batch = target.shape[0]                ## Forward
-            if AGE & SEXE:
-                sexe = target[:,0].reshape((num_elems_in_batch,1)).to(self.device)
-                age = target[:,1].reshape((num_elems_in_batch,1)).to(self.device)
-                target = target[:,2:].to(self.device)
-                if model.name == 'mobilenet_v2':
-                  feat = model.classifier(model.features(imgs))
-                  concat = torch.cat([feat,sexe,age],dim=1).float()
-                  scores = model.last(concat)
-                else:
-                    scores = model(imgs,sexe,age)
 
+            if AGE & SEXE:
+                    sexe = target[:,0].reshape((num_elems_in_batch,1)).to(self.device)
+                    age = target[:,1].reshape((num_elems_in_batch,1)).to(self.device)
+                    target = target[:,2:].to(self.device)
+                    if model.name == 'mobilenet_v2':
+                        if self.method_sex_age == 4 :
+                            scores = model.last(model.classifier(model.features(imgs)))
+                            mean_h_w = model.mean_prediction(age,sexe)
+                        else:
+                            feat = model.classifier(model.features(imgs))
+                            concat = torch.cat([feat,sexe,age],dim=1).float()
+                            scores = model.last(concat)
+                    else:
+                        scores = model(imgs,sexe,age)
             elif AGE:
                 age = target[:,0].reshape((num_elems_in_batch,1)).to(self.device)
                 target = target[:,2:].to(self.device)
@@ -288,10 +244,14 @@ class BmaiTrainer:
                 feat = model.features(imgs)
                 classi = model.classifier(feat)
                 scores = model.last(classi)
-
+            
+            
             y_true.append(target.detach().numpy() if self.device=='cpu' else target.cpu().detach().numpy())
+            if self.method_sex_age == 4 :
+                scores = torch.add(scores, mean_h_w)
+                
             predictions.append(scores.detach().numpy() if self.device=='cpu' else scores.cpu().detach().numpy())
-
+            
              # loss
             loss = self.loss_fn(scores,target).sum()
 

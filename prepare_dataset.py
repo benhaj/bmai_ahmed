@@ -173,3 +173,16 @@ def create_df_entry(args,best):
         'weight_rel_err':best[1]
     }
     return entry
+
+
+def prepare_dataset(data_name,img_size):
+    ## Data
+    # TRANSFORMS :
+    transforms = prepare_transforms()
+    if data_name == 'guinee':
+        dataset = bmaiDataset(csv_file=['/hdd/data/bmai_clean/full_guinee_data.csv'],img_size=img_size,transform=transforms)
+    elif data_name == 'cambodge':
+        dataset = bmaiDataset(csv_file=['/hdd/data/bmai_clean/full_cambodge_data.csv'],img_size=img_size,transform=transforms)
+    else:
+        dataset = bmaiDataset(csv_file=['/hdd/data/bmai_clean/full_guinee_data.csv','/hdd/data/bmai_clean/full_cambodge_data.csv'],img_size=img_size,transform=transforms)
+    return dataset

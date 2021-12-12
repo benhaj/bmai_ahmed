@@ -7,6 +7,7 @@
 import numpy as np
 import argparse
 from prepare_dataset import *
+from source.models.mobilenet import *
 from trainer_bmai_2 import *
 import torchvision
 import torch
@@ -22,6 +23,7 @@ def get_args_parser():
     parser.add_argument('--img_size',type=int,default=256,help='size of images (either 256 or 386)')
     parser.add_argument('--SEXE', type=str, default='False', help='use sexe attribute ?')
     parser.add_argument('--AGE', type=str, default='False', help='use age attribute ?')
+    parser.add_argument('--method_sex_age', type=int, default=0, help='How to use age and sex attributes ? (see documentation of Mobilenet_bmai class')
     parser.add_argument('--epochs', type=int, default=15, help='how many training epochs')
     parser.add_argument('--lr',type=float,default=0.005,help='learning rate')
     parser.add_argument('--batch_size',type=int,default=32,help='batch size')
@@ -41,30 +43,21 @@ def main(args):
     else:
         AGE = True
 
-    print(AGE)
-    print(SEXE)
 
-    ## Model
+    ## MODEL
     if args.model_name == 'mobilenet':
-        model = torchvision.models.mobilenet_v2(pretrained=True)
-        model.name = 'mobilenet_v2'
+        model = Mobilenet_bmai(args.img_size,SEXE=SEXE, AGE=AGE, method_sex_age = args.method_sex_age).model
     
-    ## Data
-    # TRANSFORMS :
-    transforms = prepare_transforms()
-    if args.data_name == 'guinee':
-        dataset = bmaiDataset(csv_file=['/hdd/data/bmai_clean/full_guinee_data.csv'],img_size=args.img_size,transform=transforms)
-    elif args.data_name == 'cambodge':
-        dataset = bmaiDataset(csv_file=['/hdd/data/bmai_clean/full_cambodge_data.csv'],img_size=args.img_size,transform=transforms)
-    else:
-        dataset = bmaiDataset(csv_file=['/hdd/data/bmai_clean/full_guinee_data.csv','/hdd/data/bmai_clean/full_cambodge_data.csv'],img_size=args.img_size,transform=transforms)
+    ## DATA
+    dataset = prepare_dataset(args.data_name,args.img_size)
         
-    ## Trainer:
+    ## TRAINER:
+    
     #wandb initialization
     run_name = f'{args.model_name}_{args.data_name}_SEED{args.SEED}_{args.img_size}_SEXE_{SEXE}_AGE_{AGE}_{args.epochs}_epochs_lr_{args.lr}'
     wandb.init(project="new-sota-model",name=run_name)
 
-    trainer = BmaiTrainer(model, dataset, seed=args.SEED, img_size=args.img_size, AGE=AGE, SEXE=SEXE, batch_size=args.batch_size, lr = args.lr, epochs=args.epochs, num_workers=args.num_workers)
+    trainer = BmaiTrainer(model, dataset, seed=args.SEED, img_size=args.img_size, AGE=AGE, SEXE=SEXE, method_sex_age=args.method_sex_age , batch_size=args.batch_size, lr = args.lr, epochs=args.epochs, num_workers=args.num_workers)
     best_ , results,mean_training_loss = trainer.train()
     torch.save(trainer.model,f'results/{run_name}.pt')
     results.to_csv(f'results/{run_name}.csv',index=False)
