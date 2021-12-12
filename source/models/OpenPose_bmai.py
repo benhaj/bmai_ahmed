@@ -130,7 +130,8 @@ class Baseline_2(nn.Module):
         return last_out
 
 
-def load_state(net, checkpoint):
+def load_state(net):
+    checkpoint = torch.load("checkpoint_iter_370000.pth", map_location='cpu')
     source_state = checkpoint['state_dict']
     target_state = net.state_dict()
     new_target_state = collections.OrderedDict()
