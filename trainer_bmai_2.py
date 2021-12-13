@@ -102,16 +102,25 @@ class BmaiTrainer:
                 
                 
                  ## data in form ['img',sexe','days','height','weight']
-                
+               
                 imgs = data[0].to(self.device)
                 target = data[1:][0]
                 num_elems_in_batch = target.shape[0]
+
+
+                ## sex and age :
+                sexe = target[:,0].reshape((num_elems_in_batch,1)).to(self.device)
+                age = target[:,1].reshape((num_elems_in_batch,1)).to(self.device)
+
+                ## Target:
+                target = target[:,2:].to(self.device)
+
+
                 ## Forward
-                if AGE & SEXE:
-                    sexe = target[:,0].reshape((num_elems_in_batch,1)).to(self.device)
-                    age = target[:,1].reshape((num_elems_in_batch,1)).to(self.device)
-                    target = target[:,2:].to(self.device)
-                    if model.name == 'mobilenet_v2':
+                
+                if model.name == 'mobilenet_v2':
+
+                    if AGE & SEXE:
                         if self.method_sex_age == 4 :
                             scores = model.last(model.classifier(model.features(imgs)))
                             mean_h_w = model.mean_prediction(torch.cat([age.float(),sexe.float()],dim=1))
@@ -119,34 +128,24 @@ class BmaiTrainer:
                             feat = model.classifier(model.features(imgs))
                             concat = torch.cat([feat,sexe,age],dim=1).float()
                             scores = model.last(concat)
+                                   
+                    elif AGE:
+                        feat = model.classifier(model.features(imgs))
+                        concat = torch.cat([feat,age],dim=1).float()
+                        scores = model.last(concat)
+                                    
+                    elif SEXE:
+                        feat = model.classifier(model.features(imgs))
+                        concat = torch.cat([feat,sexe],dim=1).float()
+                        scores = model.last(concat)
                     else:
-                        scores = model(imgs,sexe,age)
-                    
-                elif AGE:
-                    age = target[:,0].reshape((num_elems_in_batch,1)).to(self.device)
-                    target = target[:,2:].to(self.device)
-                    if model.name == 'mobilenet_v2':
-                      feat = model.classifier(model.features(imgs))
-                      concat = torch.cat([feat,age],dim=1).float()
-                      scores = model.last(concat)
-                    else:  
-                      scores = model(imgs,age)
-                    
-                elif SEXE:
-                    sexe = target[:,1].reshape((num_elems_in_batch,1)).to(self.device)
-                    target = target[:,2:].to(self.device)
-                    if model.name == 'mobilenet_v2':
-                      feat = model.classifier(model.features(imgs))
-                      concat = torch.cat([feat,sexe],dim=1).float()
-                      scores = model.last(concat)
-                    else:
-                      scores = model(imgs,sexe)
-                    
+                        feat = model.features(imgs)
+                        classi = model.classifier(feat)
+                        scores = model.last(classi)
+                       
+
                 else:
-                    target = target[:,2:].to(self.device)
-                    feat = model.features(imgs)
-                    classi = model.classifier(feat)
-                    scores = model.last(classi)
+                    scores = model(imgs,age,sexe)
                 
                 # loss
                 if self.method_sex_age == 4 :
@@ -204,46 +203,49 @@ class BmaiTrainer:
             imgs = data[0].to(self.device)
             target = data[1:][0]
             num_elems_in_batch = target.shape[0]                ## Forward
+            imgs = data[0].to(self.device)
+            target = data[1:][0]
+            num_elems_in_batch = target.shape[0]
 
-            if AGE & SEXE:
-                    sexe = target[:,0].reshape((num_elems_in_batch,1)).to(self.device)
-                    age = target[:,1].reshape((num_elems_in_batch,1)).to(self.device)
-                    target = target[:,2:].to(self.device)
-                    if model.name == 'mobilenet_v2':
-                        if self.method_sex_age == 4 :
-                            scores = model.last(model.classifier(model.features(imgs)))
-                            mean_h_w = model.mean_prediction(torch.cat([age.float(),sexe.float()],dim=1))
-                        else:
-                            feat = model.classifier(model.features(imgs))
-                            concat = torch.cat([feat,sexe,age],dim=1).float()
-                            scores = model.last(concat)
+
+            ## sex and age :
+            sexe = target[:,0].reshape((num_elems_in_batch,1)).to(self.device)
+            age = target[:,1].reshape((num_elems_in_batch,1)).to(self.device)
+
+            ## Target:
+            target = target[:,2:].to(self.device)
+
+
+                ## Forward
+                
+            if model.name == 'mobilenet_v2':
+
+                if AGE & SEXE:
+                    if self.method_sex_age == 4 :
+                        scores = model.last(model.classifier(model.features(imgs)))
+                        mean_h_w = model.mean_prediction(torch.cat([age.float(),sexe.float()],dim=1))
                     else:
-                        scores = model(imgs,sexe,age)
-            elif AGE:
-                age = target[:,0].reshape((num_elems_in_batch,1)).to(self.device)
-                target = target[:,2:].to(self.device)
-                if model.name == 'mobilenet_v2':
+                        feat = model.classifier(model.features(imgs))
+                        concat = torch.cat([feat,sexe,age],dim=1).float()
+                        scores = model.last(concat)
+                               
+                elif AGE:
                     feat = model.classifier(model.features(imgs))
                     concat = torch.cat([feat,age],dim=1).float()
                     scores = model.last(concat)
-                else:  
-                    scores = model(imgs,age)
-
-            elif SEXE:
-                sexe = target[:,1].reshape((num_elems_in_batch,1)).to(self.device)
-                target = target[:,2:].to(self.device)
-                if model.name == 'mobilenet_v2':
-                  feat = model.classifier(model.features(imgs))
-                  concat = torch.cat([feat,sexe],dim=1).float()
-                  scores = model.last(concat)
+                                    
+                elif SEXE:
+                    feat = model.classifier(model.features(imgs))
+                    concat = torch.cat([feat,sexe],dim=1).float()
+                    scores = model.last(concat)
                 else:
-                    scores = model(imgs,sexe)
+                    feat = model.features(imgs)
+                    classi = model.classifier(feat)
+                    scores = model.last(classi)
+                       
 
             else:
-                target = target[:,2:].to(self.device)
-                feat = model.features(imgs)
-                classi = model.classifier(feat)
-                scores = model.last(classi)
+                scores = model(imgs,age,sexe)
             
             
             y_true.append(target.detach().numpy() if self.device=='cpu' else target.cpu().detach().numpy())

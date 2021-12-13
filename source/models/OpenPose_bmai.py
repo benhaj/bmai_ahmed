@@ -149,7 +149,8 @@ def load_state(net):
 
 def prepare_OpenPose_model(freeze=True):
     model = OpenPose_first_and_second_Part_of_InitialStage()
-    load_state(model, checkpoint)
+    load_state(model)
     model = Baseline_2(model,freeze=True)
+    model.name = 'OpenPose_bmai'
     return model
 

@@ -61,7 +61,7 @@ class Mobilenet_bmai:
                 nn.ReLU(),
                 nn.Linear(in_features=32, out_features= 2)
             )
-        
+        model.name = 'mobilenet_v2'
         self.model = model
                 
 

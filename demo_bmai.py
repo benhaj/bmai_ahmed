@@ -11,6 +11,7 @@ from source.models.mobilenet_bmai import *
 from trainer_bmai_2 import *
 import torchvision
 import torch
+from source.models.OpenPose_bmai import *
 
 
 def get_args_parser():
@@ -23,7 +24,7 @@ def get_args_parser():
     parser.add_argument('--img_size',type=int,default=256,help='size of images (either 256 or 386)')
     parser.add_argument('--SEXE', type=str, default='False', help='use sexe attribute ?')
     parser.add_argument('--AGE', type=str, default='False', help='use age attribute ?')
-    parser.add_argument('--method_sex_age', type=int, default=0, help='How to use age and sex attributes ? (see documentation of Mobilenet_bmai class')
+    parser.add_argument('--method_sex_age', type=int, default=None, help='How to use age and sex attributes ? (see documentation of Mobilenet_bmai class')
     parser.add_argument('--epochs', type=int, default=15, help='how many training epochs')
     parser.add_argument('--lr',type=float,default=0.005,help='learning rate')
     parser.add_argument('--batch_size',type=int,default=32,help='batch size')
@@ -47,6 +48,8 @@ def main(args):
     ## MODEL
     if args.model_name == 'mobilenet':
         model = Mobilenet_bmai(args.img_size,SEXE=SEXE, AGE=AGE, method_sex_age = args.method_sex_age).model
+    else:
+        model = prepare_OpenPose_model(freeze=True)
     
     ## DATA
     dataset = prepare_dataset(args.data_name,args.img_size)
@@ -59,11 +62,11 @@ def main(args):
 
     trainer = BmaiTrainer(model, dataset, seed=args.SEED, img_size=args.img_size, AGE=AGE, SEXE=SEXE, method_sex_age=args.method_sex_age , batch_size=args.batch_size, lr = args.lr, epochs=args.epochs, num_workers=args.num_workers)
     best_ , results,mean_training_loss = trainer.train()
-    torch.save(trainer.model,f'results/{run_name}.pt')
-    results.to_csv(f'results/{run_name}.csv',index=False)
+    #torch.save(trainer.model,f'results/{run_name}.pt')
+    #results.to_csv(f'results/{run_name}.csv',index=False)
 
     summary_df = pd.json_normalize(create_df_entry(args,best_))
-    summary_df.to_csv(f'results/full_results.csv', mode='a', header=False,index=False)
+    summary_df.to_csv(f'results/OpenPose_bmai_results.csv', mode='a', header=False,index=False)
     #y_true,predictions,average_loss = trainer.test()
 
 if __name__ == '__main__':
