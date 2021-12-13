@@ -49,7 +49,7 @@ def main(args):
     if args.model_name == 'mobilenet':
         model = Mobilenet_bmai(args.img_size,SEXE=SEXE, AGE=AGE, method_sex_age = args.method_sex_age).model
     else:
-        model = prepare_OpenPose_model(freeze=True)
+        model = prepare_OpenPose_model(freeze=True,method_age_sex=args.method_sex_age)
     
     ## DATA
     dataset = prepare_dataset(args.data_name,args.img_size)

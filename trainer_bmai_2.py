@@ -148,7 +148,7 @@ class BmaiTrainer:
                     scores = model(imgs,age,sexe)
                 
                 # loss
-                if self.method_sex_age == 4 :
+                if self.method_sex_age == 4 and model.name == 'mobilenet_v2':
                     scores = torch.add(scores, mean_h_w)
                 
                 loss = self.loss_fn(scores,target).sum()
@@ -249,7 +249,7 @@ class BmaiTrainer:
             
             
             y_true.append(target.detach().numpy() if self.device=='cpu' else target.cpu().detach().numpy())
-            if self.method_sex_age == 4 :
+            if self.method_sex_age == 4 and model.name == 'mobilenet_v2':
                 scores = torch.add(scores, mean_h_w)
                 
             predictions.append(scores.detach().numpy() if self.device=='cpu' else scores.cpu().detach().numpy())

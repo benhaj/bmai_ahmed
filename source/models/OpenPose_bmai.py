@@ -61,13 +61,15 @@ class OpenPose_first_and_second_Part_of_InitialStage(nn.Module):
 
 class Baseline_2(nn.Module):
 
-    def __init__(self,inference_model,freeze=False,SEXE=False,AGE=False,OUTPUT_SIZE=(32,57)):
+    def __init__(self,inference_model,freeze=False,SEXE=False,AGE=False,method_age_sex=4,OUTPUT_SIZE=(32,57)):
         super().__init__()
         self.num_channels = inference_model.num_channels
         self.OUTPUT_SIZE = OUTPUT_SIZE
         self.inference_model = inference_model
         self.SEXE = SEXE
         self.AGE = AGE
+        self.method_age_sex = method_age_sex
+
         if freeze:
             for param in inference_model.parameters():
                 param.requires_grad = False
@@ -92,12 +94,30 @@ class Baseline_2(nn.Module):
         )
         
         if AGE & SEXE:
-            self.last = nn.Sequential(
-                # nn.Dropout(0.2),
-                nn.Linear(in_features=128+2,out_features=32),
-                nn.ReLU(),
-                nn.Linear(in_features=32,out_features=2)
-            )
+            if self.method_age_sex==4:
+                model.mean_prediction = nn.Sequential(
+                    nn.Linear(in_features=2,out_features=32),
+                    nn.ReLU(),
+                    nn.Linear(in_features=32, out_features=64),
+                    nn.ReLU(),
+                    nn.Linear(in_features=64, out_features=32),
+                    nn.ReLU(),
+                    nn.Linear(in_features=32, out_features= 2)
+                )
+                self.last = nn.Sequential(
+                    # nn.Dropout(0.2),
+                    nn.Linear(in_features=128,out_features=32),
+                    nn.ReLU(),
+                    nn.Linear(in_features=32,out_features=2)
+                )
+            else:
+                self.last = nn.Sequential(
+                    # nn.Dropout(0.2),
+                    nn.Linear(in_features=128+2,out_features=32),
+                    nn.ReLU(),
+                    nn.Linear(in_features=32,out_features=2)
+                )
+
         elif AGE or SEXE :
             self.last = nn.Sequential(
                 # nn.Dropout(0.2),
@@ -118,7 +138,13 @@ class Baseline_2(nn.Module):
         base_output = self.base(inference_output)
         classifier_output = self.classifier(base_output)
         if self.SEXE & self.AGE:
-            concat = torch.cat([classifier_output,age,sexe],dim=1).float()
+            if self.method_age_sex==4:
+                mean_h_w = self.mean_prediction(age,sexe)
+                diff_to_mean = self.last(classifier_output)
+                last_out = torch.add(diff_to_mean, mean_h_w)
+                return last_out
+            else:
+                concat = torch.cat([classifier_output,age,sexe],dim=1).float()
         elif self.SEXE:
             concat = torch.cat([classifier_output,sexe],dim=1).float()
         elif self.AGE:
@@ -147,10 +173,10 @@ def load_state(net):
 
 
 
-def prepare_OpenPose_model(freeze=True):
+def prepare_OpenPose_model(freeze=True,method_age_sex=0):
     model = OpenPose_first_and_second_Part_of_InitialStage()
     load_state(model)
-    model = Baseline_2(model,freeze=True)
+    model = Baseline_2(model,freeze=True,method_age_sex=method_age_sex)
     model.name = 'OpenPose_bmai'
     return model
 
