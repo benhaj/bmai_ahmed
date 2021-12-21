@@ -31,9 +31,16 @@ transform = midas_transforms.dpt_transform
 
 
 data = pd.read_csv('/hdd/data/bmai_clean/full_cambodge_data.csv')
-paths = data.img.values[:10]
-paths = ["/hdd/data/"+path.replace('data','bmai_clean',1) for path in paths]
-paths = [prepare_new_path(path,386) for path in paths]
+paths = ["/hdd/data/bmai_clean/cambodge/KH_September2018/KH_/01010619354/01010619354_S_384.JPG",
+    "/hdd/data/bmai_clean/cambodge/KH_September2018/KH_/03031470303/03031470303_S_384.JPG",
+    "/hdd/data/bmai_clean/cambodge/KH_September2018/KH_/02010101303/02010101303-F_384.JPG",
+    "/hdd/data/bmai_clean/cambodge/KH_September2018/KH_/02010203324/02010203324-s_384.JPG",
+    "/hdd/data/bmai_clean/cambodge/KH_September2018/KH_/01010204363/01010204363_S_384.JPG",
+    "/hdd/data/bmai_clean/cambodge/KH_September2018/KH_/03031151302/03031151302.S_384.JPG",
+    "/hdd/data/bmai_clean/cambodge/KH_September2018/KH_/02021135314/02021135314-S_384.JPG",
+    "/hdd/data/bmai_clean/cambodge/KH_September2018/KH_/03020635319/03020635320-S_384.JPG",
+    "/hdd/data/bmai_clean/cambodge/KH_September2018/KH_/03031581322/03031581322FJP_384.JPG",
+    "/hdd/data/bmai_clean/cambodge/KH_September2018/KH_/02021556369/2021556369-F_384.JPG"]
 imgs= [cv2.imread(filename) for filename in paths]
 imgs = [cv2.cvtColor(img, cv2.COLOR_BGR2RGB) for img in imgs]
 
