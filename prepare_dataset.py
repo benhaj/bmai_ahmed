@@ -34,10 +34,23 @@ class bmaiDataset(Dataset):
                     
  
     """
-    def __init__(self, csv_file = None , img_size = 256 , transform =None):
+    def __init__(self, csv_file = None , img_size = 256 , transform =None, use_midas = False):
         
         ## annotations in form ['img',sexe','days','height','weight']
-        
+        self.use_midas=use_midas
+        if self.use_midas:
+            model_type = "DPT_Large"     # MiDaS v3 - Large     (highest accuracy, slowest inference speed)
+            #model_type = "DPT_Hybrid"   # MiDaS v3 - Hybrid    (medium accuracy, medium inference speed)
+            #model_type = "MiDaS_small"  # MiDaS v2.1 - Small   (lowest accuracy, highest inference speed)
+            midas = torch.hub.load("intel-isl/MiDaS", model_type)
+            device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+            midas.to(device)
+            midas.eval()
+            midas_transforms = torch.hub.load("intel-isl/MiDaS", "transforms")
+            if model_type == "DPT_Large" or model_type == "DPT_Hybrid":
+                midas_transform = midas_transforms.dpt_transform
+            else:
+                midas_transform = midas_transforms.small_transform
         
         if len(csv_file)==1:
             self.annotations = pd.read_csv(csv_file[0])
@@ -66,16 +79,37 @@ class bmaiDataset(Dataset):
         
         new_path = prepare_new_path(img_path,self.img_size)
         img = io.imread(new_path)
+        
+        if self.use_midas:
+            img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+            input_batch = transform(img).to(device)
+            with torch.no_grad():
+                prediction = midas(input_batch)
+
+                prediction = torch.nn.functional.interpolate(
+                    prediction.unsqueeze(1),
+                    size=img.shape[:2],
+                    mode="bicubic",
+                    align_corners=False,
+                ).squeeze()
+
+            output = prediction.cpu().numpy()
             
         sexe = self.annotations.iloc[index, 1]
         days = (self.annotations.iloc[index,2] - self.age_mean) / self.age_std
         height_weight = self.annotations.iloc[index,3:].values.astype(float)
         y_label = torch.tensor(np.hstack([sexe,days,height_weight]))
         
-            
+        if use_midas:
+            concatenated_img = np.empty(shape=(img.shape[0],img.shape[1],img.shape[2]+1))
+            concatenated_img[:,:,:3] = img.copy()
+            concatenated_img[:,:,3] = output
+            img = concatenated_img.copy()
 
         if self.transform:
             img=self.transform(img.copy())
+            
+        
         return img , y_label
 
 ### RESCALE (https://pytorch.org/tutorials/beginner/data_loading_tutorial.html)
