@@ -34,7 +34,7 @@ class bmaiDataset(Dataset):
                     
  
     """
-    def __init__(self, csv_file = None , img_size = 256 , transform = None):
+    def __init__(self, csv_file = None , img_size = 256 , transform =None):
         
         ## annotations in form ['img',sexe','days','height','weight']
         

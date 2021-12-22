@@ -42,7 +42,6 @@ paths = ["/hdd/data/bmai_clean/cambodge/KH_September2018/KH_/01010619354/0101061
     "/hdd/data/bmai_clean/cambodge/KH_September2018/KH_/03031581322/03031581322FJP_384.JPG",
     "/hdd/data/bmai_clean/cambodge/KH_September2018/KH_/02021556369/2021556369-F_384.JPG"]
 imgs= [cv2.imread(filename) for filename in paths]
-imgs = [cv2.cvtColor(img, cv2.COLOR_BGR2RGB) for img in imgs]
 
 with torch.no_grad():
     for i in range(len(imgs)):
@@ -68,6 +67,6 @@ with torch.no_grad():
         output1 = prediction1.cpu().numpy()
         output2 = prediction2.cpu().numpy()
         
-        cv2.imwrite(f'midas_{model_type1}_{i}',output1)
-        cv2.imwrite(f'midas_{model_type2}_{i}',output2)
+        cv2.imwrite(f'midas_{model_type1}_{i}.JPG',output1)
+        cv2.imwrite(f'midas_{model_type2}_{i}.JPG',output2)
         
