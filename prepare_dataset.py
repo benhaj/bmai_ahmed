@@ -39,18 +39,11 @@ class bmaiDataset(Dataset):
         ## annotations in form ['img',sexe','days','height','weight']
         self.use_midas=use_midas
         if self.use_midas:
-            model_type = "DPT_Large"     # MiDaS v3 - Large     (highest accuracy, slowest inference speed)
-            #model_type = "DPT_Hybrid"   # MiDaS v3 - Hybrid    (medium accuracy, medium inference speed)
-            #model_type = "MiDaS_small"  # MiDaS v2.1 - Small   (lowest accuracy, highest inference speed)
-            midas = torch.hub.load("intel-isl/MiDaS", model_type)
+            midas = torch.hub.load("intel-isl/MiDaS", "DPT_Large")
             device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
             midas.to(device)
             midas.eval()
             midas_transforms = torch.hub.load("intel-isl/MiDaS", "transforms")
-            if model_type == "DPT_Large" or model_type == "DPT_Hybrid":
-                midas_transform = midas_transforms.dpt_transform
-            else:
-                midas_transform = midas_transforms.small_transform
         
         if len(csv_file)==1:
             self.annotations = pd.read_csv(csv_file[0])
@@ -82,7 +75,7 @@ class bmaiDataset(Dataset):
         
         if self.use_midas:
             img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-            input_batch = transform(img).to(device)
+            input_batch = midas_transform(img).to(device)
             with torch.no_grad():
                 prediction = midas(input_batch)
 
