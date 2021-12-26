@@ -151,8 +151,22 @@ class Pad(object):
     
 def prepare_transforms(img_mean=IMG_MEAN,img_std=1):
     normalization = transforms.Normalize(IMG_MEAN,1)
+    colorJitter = transforms.RandomApply(torch.nn.ModuleList([transforms.ColorJitter()]),p=0.5)
+    GaussianBlur = transforms.RandomApply(torch.nn.ModuleList([transforms.GaussianBlur(3)]))
+    RandomSolarize =  transforms.RandomSolarize(0, p=0.5)
+    RandomHorizontalFlip = transforms.RandomHorizontalFlip()
+    RandomVerticalFlip = transforms.RandomVerticalFlip()
+    RandomRotation = transforms.RandomRotation((0,359), expand=False)
+    
     composed = transforms.Compose([transforms.ToTensor(),
-                                   normalization])
+                                   normalization,
+                                   colorJitter,
+                                   GaussianBlur,
+                                    RandomSolarize,
+                                    RandomHorizontalFlip,
+                                    RandomVerticalFlip,
+                                    RandomRotation])
+    
     #                               transforms.Resize((HEIGHT_SIZE,HEIGHT_SIZE)),
     #                           Pad(stride=8, pad_value=(0, 0, 0))
     #                          ])
