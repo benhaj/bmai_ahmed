@@ -74,19 +74,21 @@ class Baseline_2(nn.Module):
             for param in inference_model.parameters():
                 param.requires_grad = False
         self.base = nn.Sequential(
-            nn.Conv2d(in_channels=512, out_channels=64, kernel_size=1),
-            nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2),
-            nn.Conv2d(in_channels=64,out_channels=32,kernel_size=1),
-            nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2),
-            nn.Conv2d(in_channels=32,out_channels=1,kernel_size=1),
-            nn.AdaptiveAvgPool2d(output_size=OUTPUT_SIZE)
+            #nn.Conv2d(in_channels=512, out_channels=64, kernel_size=1),
+            #nn.ReLU(),
+            #nn.MaxPool2d(kernel_size=2),
+            #nn.Conv2d(in_channels=64,out_channels=32,kernel_size=1),
+            #nn.ReLU(),
+            #nn.MaxPool2d(kernel_size=2),
+            #nn.Conv2d(in_channels=32,out_channels=1,kernel_size=1),
+            #nn.AdaptiveAvgPool2d(output_size=OUTPUT_SIZE)
         )
+
         self.classifier = nn.Sequential(
-            nn.Dropout(0.1),
+            #nn.Dropout(0.1),
             nn.Flatten(),
-            nn.Linear(in_features=OUTPUT_SIZE[0]*OUTPUT_SIZE[1],out_features=256),
+            #nn.Linear(in_features=OUTPUT_SIZE[0]*OUTPUT_SIZE[1],out_features=256),
+            nn.Linear(in_features=48*48,out_features=256),
             nn.ReLU(),
             nn.Linear(in_features=256,out_features=128),
             nn.ReLU()
@@ -135,8 +137,7 @@ class Baseline_2(nn.Module):
 
     def forward(self, x,age,sexe):
         inference_output = self.inference_model(x)
-        base_output = self.base(inference_output)
-        classifier_output = self.classifier(base_output)
+        classifier_output = self.classifier(inference_output)
         if self.SEXE & self.AGE:
             if self.method_age_sex==4:
                 mean_h_w = self.mean_prediction(age,sexe)
@@ -151,7 +152,7 @@ class Baseline_2(nn.Module):
             concat = torch.cat([classifier_output,age],dim=1).float()
         else:
             concat = classifier_output
-        
+
         last_out = self.last(concat)
         return last_out
 
@@ -227,7 +228,7 @@ class InitialStage(nn.Module):
         heatmaps = self.heatmaps(trunk_features)
         pafs = self.pafs(trunk_features)
         return [heatmaps, pafs]
-
+        #return np.sum(pafs,axis=2)
 
 class RefinementStageBlock(nn.Module):
     def __init__(self, in_channels, out_channels):
@@ -265,14 +266,17 @@ class RefinementStage(nn.Module):
 
     def forward(self, x):
         trunk_features = self.trunk(x)
-        heatmaps = self.heatmaps(trunk_features)
+        #heatmaps = self.heatmaps(trunk_features)
         pafs = self.pafs(trunk_features)
-        return [heatmaps, pafs]
+        #return [heatmaps, pafs]
+        return torch.sum(pafs,dim=1)
 
 
 class PoseEstimationWithMobileNet(nn.Module):
     def __init__(self, num_refinement_stages=1, num_channels=128, num_heatmaps=19, num_pafs=38):
-        super().__init__()  
+        super().__init__()
+        self.num_channels=num_channels
+
         self.model = nn.Sequential(
             conv(3,  32, stride=2, bias=False),
             conv_dw( 32,  64),
@@ -300,17 +304,15 @@ class PoseEstimationWithMobileNet(nn.Module):
         backbone_features = self.cpm(backbone_features)
 
         stages_output = self.initial_stage(backbone_features)
-        for refinement_stage in self.refinement_stages:
-            stages_output.extend(
-                refinement_stage(torch.cat([backbone_features, stages_output[-2], stages_output[-1]], dim=1)))
-
-        return stages_output
+        #for refinement_stage in self.refinement_stages:
+        #    stages_output.extend(
+        #        refinement_stage(torch.cat([backbone_features, stages_output[-2], stages_output[-1]], dim=1)))
+        return torch.sum(stages_output[1],dim=1)
 
 
 def prepare_OpenPose_model(freeze=True,method_age_sex=0):
     model = PoseEstimationWithMobileNet()
-    checkpoint = torch.load("checkpoint_iter_370000.pth", map_location='cpu')
-    model = load_state(model, checkpoint)
+    load_state(model)
     model = Baseline_2(model,freeze=True,method_age_sex=method_age_sex)
     model.name = 'OpenPose_bmai'
     return model

@@ -73,32 +73,13 @@ class bmaiDataset(Dataset):
         new_path = prepare_new_path(img_path,self.img_size)
         img = io.imread(new_path)
         
-        if self.use_midas:
-            img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-            input_batch = midas_transform(img).to(device)
-            with torch.no_grad():
-                prediction = midas(input_batch)
-
-                prediction = torch.nn.functional.interpolate(
-                    prediction.unsqueeze(1),
-                    size=img.shape[:2],
-                    mode="bicubic",
-                    align_corners=False,
-                ).squeeze()
-
-            output = prediction.cpu().numpy()
-            
+                    
         sexe = self.annotations.iloc[index, 1]
         days = (self.annotations.iloc[index,2] - self.age_mean) / self.age_std
         height_weight = self.annotations.iloc[index,3:].values.astype(float)
         y_label = torch.tensor(np.hstack([sexe,days,height_weight]))
         
-        if use_midas:
-            concatenated_img = np.empty(shape=(img.shape[0],img.shape[1],img.shape[2]+1))
-            concatenated_img[:,:,:3] = img.copy()
-            concatenated_img[:,:,3] = output
-            img = concatenated_img.copy()
-
+        
         if self.transform:
             img=self.transform(img.copy())
             

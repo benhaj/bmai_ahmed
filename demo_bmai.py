@@ -25,7 +25,7 @@ def get_args_parser():
     parser.add_argument('--SEXE', type=str, default='False', help='use sexe attribute ?')
     parser.add_argument('--AGE', type=str, default='False', help='use age attribute ?')
     parser.add_argument('--method_sex_age', type=int, default=None, help='How to use age and sex attributes ? (see documentation of Mobilenet_bmai class')
-    parsed.add_argument('--use_midas',type=str,default='False',help='do you wnat to use Midas for depth prediction as additional input')
+    parser.add_argument('--use_midas',type=str,default='False',help='do you wnat to use Midas for depth prediction as additional input')
     parser.add_argument('--epochs', type=int, default=15, help='how many training epochs')
     parser.add_argument('--lr',type=float,default=0.005,help='learning rate')
     parser.add_argument('--batch_size',type=int,default=32,help='batch size')
@@ -57,7 +57,7 @@ def main(args):
         model = prepare_OpenPose_model(freeze=True,method_age_sex=args.method_sex_age)
     
     ## DATA
-    dataset = prepare_dataset(args.data_name,args.img_size,use_midas=use_midas)
+    dataset = prepare_dataset(args.data_name,args.img_size)
         
     ## TRAINER:
     
@@ -65,7 +65,7 @@ def main(args):
     run_name = f'{args.model_name}_Midas{use_midas}_{args.data_name}_SEED{args.SEED}_{args.img_size}_SEXE_{SEXE}_AGE_{AGE}_{args.epochs}_epochs_lr_{args.lr}'
     wandb.init(project="new-sota-model",name=run_name)
 
-    trainer = BmaiTrainer(model, dataset, seed=args.SEED, img_size=args.img_size, AGE=AGE, SEXE=SEXE, method_sex_age=args.method_sex_age ,use_midas=use_midas, batch_size=args.batch_size, lr = args.lr, epochs=args.epochs, num_workers=args.num_workers)
+    trainer = BmaiTrainer(model, dataset, seed=args.SEED, img_size=args.img_size, AGE=AGE, SEXE=SEXE, method_sex_age=args.method_sex_age , batch_size=args.batch_size, lr = args.lr, epochs=args.epochs, num_workers=args.num_workers)
     best_ , results,mean_training_loss = trainer.train()
     #torch.save(trainer.model,f'results/{run_name}.pt')
     #results.to_csv(f'results/{run_name}.csv',index=False)
