@@ -245,7 +245,7 @@ class BmaiTrainer:
                        
 
             else:
-                scores = model(imgs,age,sexe)
+                scores = model(imgs)#,age,sexe)
             
             
             y_true.append(target.detach().numpy() if self.device=='cpu' else target.cpu().detach().numpy())
