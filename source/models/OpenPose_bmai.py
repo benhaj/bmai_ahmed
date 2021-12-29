@@ -26,7 +26,45 @@ import collections
 
 from source.modules.conv import *
 
+## MODEL 1 (full lightweight openpose model, with PAFs output summed.
 
+class Baseline_1(nn.Module):
+
+    def __init__(self,inference_model,freeze=False,OUTPUT_SIZE=(192,192)):
+        super().__init__()
+        self.name = "baseline1_freeze" if freeze else "baseline1_NoFreeze"
+        self.num_channels = inference_model.num_channels
+        self.OUTPUT_SIZE = OUTPUT_SIZE
+        self.inference_model = inference_model
+        
+        if freeze:
+            for param in inference_model.parameters():
+                param.requires_grad = False
+#         self.base = nn.Sequential(
+#             nn.Conv2d(in_channels=, out_channels=64, kernel_size=1),
+#             nn.ReLU(),
+#             nn.MaxPool2d(kernel_size=2),
+#             nn.Conv2d(in_channels=64,out_channels=32,kernel_size=1),
+#             nn.ReLU(),
+#             nn.MaxPool2d(kernel_size=2),
+#             nn.Conv2d(in_channels=256,out_channels=1,kernel_size=1),
+#             nn.AdaptiveAvgPool2d(output_size=OUTPUT_SIZE)
+#         )
+        self.last = nn.Sequential(
+            #nn.Dropout(0.1),
+            nn.Flatten(),
+            nn.Linear(in_features=OUTPUT_SIZE[0]*OUTPUT_SIZE[1],out_features=1024),
+            nn.ReLU(),
+            nn.Linear(in_features=1024,out_features=128),
+            nn.ReLU(),
+            nn.Linear(in_features=128,out_features=2)
+        )    
+
+    def forward(self, x):
+        inference_output = self.inference_model(x)
+#         base_output = self.base(inference_output)
+        last_out = self.last(inference_output)
+        return last_out
 
 
 ### MODEL 2
@@ -181,6 +219,8 @@ def load_state(net):
 #     model.name = 'OpenPose_bmai'
 #     return model
 
+
+
 """
 Taken as is from: https://github.com/Daniil-Osokin/lightweight-human-pose-estimation.pytorch
 """
@@ -266,10 +306,10 @@ class RefinementStage(nn.Module):
 
     def forward(self, x):
         trunk_features = self.trunk(x)
-        #heatmaps = self.heatmaps(trunk_features)
+        heatmaps = self.heatmaps(trunk_features)
         pafs = self.pafs(trunk_features)
-        #return [heatmaps, pafs]
-        return torch.sum(pafs,dim=1)
+        return [heatmaps, pafs]
+#         return torch.sum(pafs,dim=1)
 
 
 class PoseEstimationWithMobileNet(nn.Module):
@@ -304,15 +344,18 @@ class PoseEstimationWithMobileNet(nn.Module):
         backbone_features = self.cpm(backbone_features)
 
         stages_output = self.initial_stage(backbone_features)
-        #for refinement_stage in self.refinement_stages:
-        #    stages_output.extend(
-        #        refinement_stage(torch.cat([backbone_features, stages_output[-2], stages_output[-1]], dim=1)))
-        return torch.sum(stages_output[1],dim=1)
+        for refinement_stage in self.refinement_stages:
+            stages_output.extend(
+                refinement_stage(torch.cat([backbone_features, stages_output[-2], stages_output[-1]], dim=1)))
+        ## select pafs, arrange channels and sum them
+        pafs = stages_output[-1]
+        pafs = transforms.Resize((192, 192), interpolation=transforms.InterpolationMode.BICUBIC)(pafs)
+        return torch.sum(pafs,dim=1)
 
 
 def prepare_OpenPose_model(freeze=True,method_age_sex=0):
     model = PoseEstimationWithMobileNet()
     load_state(model)
-    model = Baseline_2(model,freeze=True,method_age_sex=method_age_sex)
+    model = Baseline_1(model,freeze=True)
     model.name = 'OpenPose_bmai'
     return model
