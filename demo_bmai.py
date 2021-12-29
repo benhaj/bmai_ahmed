@@ -25,7 +25,6 @@ def get_args_parser():
     parser.add_argument('--SEXE', type=str, default='False', help='use sexe attribute ?')
     parser.add_argument('--AGE', type=str, default='False', help='use age attribute ?')
     parser.add_argument('--method_sex_age', type=int, default=None, help='How to use age and sex attributes ? (see documentation of Mobilenet_bmai class')
-    parser.add_argument('--use_midas',type=str,default='False',help='do you wnat to use Midas for depth prediction as additional input')
     parser.add_argument('--epochs', type=int, default=15, help='how many training epochs')
     parser.add_argument('--lr',type=float,default=0.005,help='learning rate')
     parser.add_argument('--batch_size',type=int,default=32,help='batch size')
@@ -44,15 +43,11 @@ def main(args):
         AGE = False
     else:
         AGE = True
-    
-    if(args.use_midas == 'False'):
-        use_midas = False
-    else:
-        use_midas = True
+
 
     ## MODEL
     if args.model_name == 'mobilenet':
-        model = Mobilenet_bmai(args.img_size,SEXE=SEXE, AGE=AGE, method_sex_age = args.method_sex_age,use_midas=use_midas).model
+        model = Mobilenet_bmai(args.img_size,SEXE=SEXE, AGE=AGE, method_sex_age = args.method_sex_age).model
     else:
         model = prepare_OpenPose_model(freeze=True,method_age_sex=args.method_sex_age)
     

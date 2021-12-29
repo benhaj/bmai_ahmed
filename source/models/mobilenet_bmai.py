@@ -11,7 +11,7 @@ import torchvision
 
 class Mobilenet_bmai:
     
-    def __init__(self, img_size, SEXE=False, AGE=False, method_sex_age = 0,use_midas = False):
+    def __init__(self, img_size, SEXE=False, AGE=False, method_sex_age = 0):
         """
         Initializes the modified mobilnet model depending on how we want to add sex and age attributes
         :param SEX : Boolean, if we use sex attribute or not.
@@ -33,16 +33,7 @@ class Mobilenet_bmai:
         for param in model.parameters():
             param.requires_grad = False
             
-        if use_midas:
-            first_layer= nn.Sequential(
-                torch.nn.Conv2d(4,3,kernel_size=3,stride=1,padding=1,bias=True),
-                torch.nn.ReLU()
-            )
-            model.features = torch.nn.Sequential(
-                first_conv,
-                model.features
-            )
-            
+        
         if method_sex_age == 1 :
             # Instantiate new fully connected layer
             model.classifer = classifier_method_1(self.img_size)
