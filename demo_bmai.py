@@ -62,7 +62,7 @@ def main(args):
     ## TRAINER:
     
     #wandb initialization
-    run_name = f'{args.model_name}_Midas{use_midas}_{args.data_name}_SEED{args.SEED}_{args.img_size}_SEXE_{SEXE}_AGE_{AGE}_{args.epochs}_epochs_lr_{args.lr}'
+    run_name = f'{args.model_name}_Full_{args.data_name}_SEED{args.SEED}_{args.img_size}_SEXE_{SEXE}_AGE_{AGE}_{args.epochs}_epochs_lr_{args.lr}'
     wandb.init(project="new-sota-model",name=run_name)
 
     trainer = BmaiTrainer(model, dataset, seed=args.SEED, img_size=args.img_size, AGE=AGE, SEXE=SEXE, method_sex_age=args.method_sex_age , batch_size=args.batch_size, lr = args.lr, epochs=args.epochs, num_workers=args.num_workers)
@@ -71,7 +71,7 @@ def main(args):
     #results.to_csv(f'results/{run_name}.csv',index=False)
 
     summary_df = pd.json_normalize(create_df_entry(args,best_))
-    summary_df.to_csv(f'results/OpenPose_bmai_results.csv', mode='a', header=False,index=False)
+    summary_df.to_csv(f'results/Full_OpenPose_bmai_results.csv', mode='a', header=False,index=False)
     #y_true,predictions,average_loss = trainer.test()
 
 if __name__ == '__main__':
