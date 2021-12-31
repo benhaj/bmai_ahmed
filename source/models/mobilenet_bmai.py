@@ -67,7 +67,7 @@ class Mobilenet_bmai(nn.Module):
                 nn.ReLU(),
                 nn.Linear(in_features=32, out_features= 2)
             )
-        model.name = 'mobilenet_v2'
+        self.name = 'mobilenet_v2'
         #self.model = model
         self.method_sex_age = method_sex_age
     
