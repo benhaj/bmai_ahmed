@@ -9,7 +9,7 @@ import torchvision
 
 
 
-class Mobilenet_bmai:
+class Mobilenet_bmai(nn.Module):
     
     def __init__(self, img_size, SEXE=False, AGE=False, method_sex_age = 0):
         """
@@ -25,35 +25,40 @@ class Mobilenet_bmai:
                 to predict the mean_height and mean_weight. In this case, our Mobilenet model will predict the difference
                 between the True H/W and the Mean H/W. 
         """
-        model = torchvision.models.mobilenet_v2(pretrained=True)
+        super().__init__()
+        self.features = torchvision.models.mobilenet_v2(pretrained=True).features
         self.img_size = img_size
         self.SEXE = SEXE
         self.AGE = AGE
         # Freeze parameters
         for param in model.parameters():
             param.requires_grad = False
-            
+        
+        if method_sex_age == 0 :
+            # Instantiate new fully connected layer
+            self.classifier = classifier_method_1(self.img_size)
+            self.last = last_layer_method_1(self.AGE,self.SEXE)
         
         if method_sex_age == 1 :
             # Instantiate new fully connected layer
-            model.classifer = classifier_method_1(self.img_size)
-            model.last = last_layer_method_1(self.AGE,self.SEXE)
+            self.classifier = classifier_method_1(self.img_size)
+            self.last = last_layer_method_1(self.AGE,self.SEXE)
         
         if method_sex_age == 2 :
             # Instantiate new fully connected layer
-            model.classifer = classifier_method_2(self.img_size)
-            model.last = last_layer_method_2(self.AGE,self.SEXE)
+            self.classifier = classifier_method_2(self.img_size)
+            self.last = last_layer_method_2(self.AGE,self.SEXE)
         
         if method_sex_age == 3 :
             # Instantiate new fully connected layer
-            model.classifer = classifier_method_3(self.img_size)
-            model.last = last_layer_method_3(self.AGE,self.SEXE)
+            self.classifier = classifier_method_3(self.img_size)
+            self.last = last_layer_method_3(self.AGE,self.SEXE)
         
         if method_sex_age == 4 :
-            model.classifier = classifier_method_3(self.img_size)
-            model.last = last_layer_method_3(False,False)
+            self.classifier = classifier_method_3(self.img_size)
+            self.last = last_layer_method_3(False,False)
             
-            model.mean_prediction = nn.Sequential(
+            self.mean_prediction = nn.Sequential(
                 nn.Linear(in_features=2,out_features=32),
                 nn.ReLU(),
                 nn.Linear(in_features=32, out_features=64),
@@ -63,8 +68,37 @@ class Mobilenet_bmai:
                 nn.Linear(in_features=32, out_features= 2)
             )
         model.name = 'mobilenet_v2'
-        self.model = model
-                
+        #self.model = model
+        self.method_sex_age = method_sex_age
+    
+    
+    def forward(self,imgs,age,sexe):
+        if self.AGE & self.SEXE:
+            if self.method_sex_age == 4 :
+                scores = self.last(self.classifier(self.features(imgs)))
+                mean_h_w = self.mean_prediction(torch.cat([age.float(),sexe.float()],dim=1))
+                scores = torch.add(scores, mean_h_w)
+            else:
+                feat = self.classifier(self.features(imgs))
+                concat = torch.cat([feat,sexe,age],dim=1).float()
+                scores = self.last(concat)
+
+        elif self.AGE:
+            feat = self.classifier(self.features(imgs))
+            concat = torch.cat([feat,age],dim=1).float()
+            scores = self.last(concat)
+
+        elif self.SEXE:
+            feat = self.classifier(self.features(imgs))
+            concat = torch.cat([feat,sexe],dim=1).float()
+            scores = self.last(concat)
+        else:
+            feat = self.features(imgs)
+            classi = self.classifier(feat)
+            scores = self.last(classi)
+        
+        return scores
+           
 
 def classifier_method_1(img_size):
     if img_size==256:

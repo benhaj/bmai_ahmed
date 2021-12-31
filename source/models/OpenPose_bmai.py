@@ -60,7 +60,7 @@ class Baseline_1(nn.Module):
             nn.Linear(in_features=128,out_features=2)
         )    
 
-    def forward(self, x):
+    def forward(self, x,age,sex):
         inference_output = self.inference_model(x)
 #         base_output = self.base(inference_output)
         last_out = self.last(inference_output)
@@ -267,8 +267,9 @@ class InitialStage(nn.Module):
         trunk_features = self.trunk(x)
         heatmaps = self.heatmaps(trunk_features)
         pafs = self.pafs(trunk_features)
-        return [heatmaps, pafs]
-        #return np.sum(pafs,axis=2)
+#         return [heatmaps, pafs]
+        print(pafs.shape)
+        return np.sum(pafs,axis=2)
 
 class RefinementStageBlock(nn.Module):
     def __init__(self, in_channels, out_channels):

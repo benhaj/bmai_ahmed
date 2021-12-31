@@ -188,6 +188,7 @@ def create_df_entry(args,best):
         'img_size':args.img_size,
         'sexe':args.SEXE,
         'age':args.AGE,
+        'method_sex_age':args.method_sex_age,
         'seed':args.SEED,
         'epochs':args.epochs,
         'lr':args.lr,
