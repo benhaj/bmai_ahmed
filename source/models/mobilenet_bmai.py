@@ -31,7 +31,7 @@ class Mobilenet_bmai(nn.Module):
         self.SEXE = SEXE
         self.AGE = AGE
         # Freeze parameters
-        for param in model.parameters():
+        for param in self.features.parameters():
             param.requires_grad = False
         
         if method_sex_age == 0 :
