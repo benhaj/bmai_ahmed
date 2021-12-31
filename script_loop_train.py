@@ -29,4 +29,4 @@ for data_name in data:
         for AGE in AGEs:
             for SEXE in SEXEs:
                 for SEED in [0,1,2,3]:
-                    os.system(f'python demo_bmai.py --model_name OpenPose --data_name {data_name} --SEED {SEED} --img_size {img_size} --SEXE {SEXE} --AGE {AGE} --method_sex_age 0 --epochs 30 --lr 0.005 --batch_size 128 --num_workers 16')
+                    os.system(f'python demo_bmai.py --model_name mobilenet --data_name {data_name} --SEED {SEED} --img_size {img_size} --SEXE {SEXE} --AGE {AGE} --method_sex_age 0 --epochs 30 --lr 0.005 --batch_size 128 --num_workers 16')
