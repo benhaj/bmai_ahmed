@@ -146,7 +146,7 @@ class BmaiTrainer:
 
 #                 else:
                 
-                scores = model(imgs,age,sexe)
+                scores = model(imgs)#,age,sexe)
                 
 #                 # loss
 #                 if self.method_sex_age == 4 and model.name == 'mobilenet_v2':
@@ -246,7 +246,7 @@ class BmaiTrainer:
                        
 
 #             else:
-            scores = model(imgs,age,sexe)
+            scores = model(imgs)#,age,sexe)
             
             
             y_true.append(target.detach().numpy() if self.device=='cpu' else target.cpu().detach().numpy())
