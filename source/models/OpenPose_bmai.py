@@ -30,46 +30,37 @@ from source.modules.conv import *
 
 class Baseline_1(nn.Module):
 
-    def __init__(self,inference_model,freeze=False,OUTPUT_SIZE=(192,192)):
+    def __init__(self,inference_model,freeze=False,IMG_SIZE=256):
         super().__init__()
         self.name = "baseline1_freeze" if freeze else "baseline1_NoFreeze"
         self.num_channels = inference_model.num_channels
-        self.OUTPUT_SIZE = OUTPUT_SIZE
+        self.in_features = int((IMG_SIZE/8) * (IMG_SIZE/8))
         self.inference_model = inference_model
         
         if freeze:
             for param in inference_model.parameters():
                 param.requires_grad = False
-#         self.base = nn.Sequential(
-#             nn.Conv2d(in_channels=, out_channels=64, kernel_size=1),
-#             nn.ReLU(),
-#             nn.MaxPool2d(kernel_size=2),
-#             nn.Conv2d(in_channels=64,out_channels=32,kernel_size=1),
-#             nn.ReLU(),
-#             nn.MaxPool2d(kernel_size=2),
-#             nn.Conv2d(in_channels=256,out_channels=1,kernel_size=1),
-#             nn.AdaptiveAvgPool2d(output_size=OUTPUT_SIZE)
-#         )
+
         self.last = nn.Sequential(
-            #nn.Dropout(0.1),
+            conv_dw(512, 64),
+            conv_dw(64, 1),
             nn.Flatten(),
-            nn.Linear(in_features=OUTPUT_SIZE[0]*OUTPUT_SIZE[1],out_features=1024),
+            nn.Linear(in_features=self.in_features,out_features=1024),
             nn.ReLU(),
             nn.Linear(in_features=1024,out_features=128),
             nn.ReLU(),
             nn.Linear(in_features=128,out_features=2)
         )    
 
-    def forward(self, x,age,sex):
+    def forward(self, x):
         inference_output = self.inference_model(x)
-#         base_output = self.base(inference_output)
         last_out = self.last(inference_output)
         return last_out
 
 
 ### MODEL 2
 
-class OpenPose_first_and_second_Part_of_InitialStage(nn.Module):
+class Mobilenet_v1_part_of_OpenPose(nn.Module):
     def __init__(self, num_channels=128):
         super().__init__()
         self.num_channels=num_channels
@@ -85,16 +76,11 @@ class OpenPose_first_and_second_Part_of_InitialStage(nn.Module):
             conv_dw(512, 512),
             conv_dw(512, 512),
             conv_dw(512, 512),
-            conv_dw(512, 512)   # conv5_5
+            conv_dw(512, 512), # conv5_5
          )
-        # self.cpm = Cpm(256, num_channels)
-        # self.initial_stage = InitialStage(num_channels)
-    
     
     def forward(self, x):
         backbone_features = self.model(x)
-        # backbone_features = self.cpm(backbone_features)
-        # stages_output = self.initial_stage(backbone_features)
         return backbone_features
 
 class Baseline_2(nn.Module):
@@ -355,7 +341,7 @@ class PoseEstimationWithMobileNet(nn.Module):
 
 
 def prepare_OpenPose_model(freeze=True,method_age_sex=0):
-    model = PoseEstimationWithMobileNet()
+    model = Mobilenet_v1_part_of_OpenPose()
     load_state(model)
     model = Baseline_1(model,freeze=True)
     model.name = 'OpenPose_bmai'
