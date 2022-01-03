@@ -210,7 +210,7 @@ class BmaiTrainer:
         
         ## save predictions:
         
-            if ((epoch_num%3 == 0) & (epoch_num!=0)):
+        if ((epoch_num%3 == 0) & (epoch_num!=0)):
             torch.save(y_true,'results/y_true_guinee_mobilenet_v2.pt')
             torch.save(predictions,f'results/predictions_guinee_mobilenet_v2_epoch_{epoch_num}.pt')
             #torch.save(predictions_branch,'results/predictions_branch_guinee_cambodge.pt')
