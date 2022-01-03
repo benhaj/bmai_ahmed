@@ -44,6 +44,7 @@ class Baseline_1(nn.Module):
         self.last = nn.Sequential(
             conv_dw(512, 64),
             conv_dw(64, 1),
+            nn.Dropout(0.1),
             nn.Flatten(),
             nn.Linear(in_features=self.in_features,out_features=1024),
             nn.ReLU(),
