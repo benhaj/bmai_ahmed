@@ -115,7 +115,7 @@ class BmaiTrainer:
                 ## Target:
                 target = target[:,2:].to(self.device)
 
-                scores = model(imgs)#,age,sexe)
+                scores = model(imgs,age,sexe)
                             
                 loss = self.loss_fn(scores,target).sum()
                 
@@ -183,7 +183,7 @@ class BmaiTrainer:
             target = target[:,2:].to(self.device)
 
             ## Forward
-            scores = model(imgs)#,age,sexe)
+            scores = model(imgs,age,sexe)
             
             
             y_true.append(target.detach().numpy() if self.device=='cpu' else target.cpu().detach().numpy())                
