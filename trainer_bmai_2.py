@@ -115,43 +115,8 @@ class BmaiTrainer:
                 ## Target:
                 target = target[:,2:].to(self.device)
 
-
-                ## Forward
-                
-#                 if model.name == 'mobilenet_v2':
-
-#                     if AGE & SEXE:
-#                         if self.method_sex_age == 4 :
-#                             scores = model.last(model.classifier(model.features(imgs)))
-#                             mean_h_w = model.mean_prediction(torch.cat([age.float(),sexe.float()],dim=1))
-#                         else:
-#                             feat = model.classifier(model.features(imgs))
-#                             concat = torch.cat([feat,sexe,age],dim=1).float()
-#                             scores = model.last(concat)
-                                   
-#                     elif AGE:
-#                         feat = model.classifier(model.features(imgs))
-#                         concat = torch.cat([feat,age],dim=1).float()
-#                         scores = model.last(concat)
-                                    
-#                     elif SEXE:
-#                         feat = model.classifier(model.features(imgs))
-#                         concat = torch.cat([feat,sexe],dim=1).float()
-#                         scores = model.last(concat)
-#                     else:
-#                         feat = model.features(imgs)
-#                         classi = model.classifier(feat)
-#                         scores = model.last(classi)
-                       
-
-#                 else:
-                
                 scores = model(imgs)#,age,sexe)
-                
-#                 # loss
-#                 if self.method_sex_age == 4 and model.name == 'mobilenet_v2':
-#                     scores = torch.add(scores, mean_h_w)
-                
+                            
                 loss = self.loss_fn(scores,target).sum()
                 
                 # backward
@@ -217,47 +182,16 @@ class BmaiTrainer:
             ## Target:
             target = target[:,2:].to(self.device)
 
-                ## Forward
-                
-#             if model.name == 'mobilenet_v2':
-
-#                 if AGE & SEXE:
-#                     if self.method_sex_age == 4 :
-#                         scores = model.last(model.classifier(model.features(imgs)))
-#                         mean_h_w = model.mean_prediction(torch.cat([age.float(),sexe.float()],dim=1))
-#                     else:
-#                         feat = model.classifier(model.features(imgs))
-#                         concat = torch.cat([feat,sexe,age],dim=1).float()
-#                         scores = model.last(concat)
-                               
-#                 elif AGE:
-#                     feat = model.classifier(model.features(imgs))
-#                     concat = torch.cat([feat,age],dim=1).float()
-#                     scores = model.last(concat)
-                                    
-#                 elif SEXE:
-#                     feat = model.classifier(model.features(imgs))
-#                     concat = torch.cat([feat,sexe],dim=1).float()
-#                     scores = model.last(concat)
-#                 else:
-#                     feat = model.features(imgs)
-#                     classi = model.classifier(feat)
-#                     scores = model.last(classi)
-                       
-
-#             else:
+            ## Forward
             scores = model(imgs)#,age,sexe)
             
             
-            y_true.append(target.detach().numpy() if self.device=='cpu' else target.cpu().detach().numpy())
-#             if self.method_sex_age == 4 and model.name == 'mobilenet_v2':
-#                 scores = torch.add(scores, mean_h_w)
-                
+            y_true.append(target.detach().numpy() if self.device=='cpu' else target.cpu().detach().numpy())                
             predictions.append(scores.detach().numpy() if self.device=='cpu' else scores.cpu().detach().numpy())
             #predictions_branch.append(mean_h_w.cpu().detach().numpy())
-             # loss
+             
+            # loss
             loss = self.loss_fn(scores,target).sum()
-
             batch_losses.append(loss.item() if self.device=='cpu' else loss.cpu().item())
 
                 
@@ -267,15 +201,20 @@ class BmaiTrainer:
         y_true= np.vstack(y_true)
         predictions = np.vstack(predictions)
         #predictions_branch = np.vstack(predictions_branch) #### JUST TO SEE BRANCH PREDICTIONS
-        if (epoch_num==self.epochs-1):
-            torch.save(y_true,'results/y_true_guinee_mobilenet_v1.pt')
-            torch.save(predictions,'results/predictions_guinee_mobilenet_v1.pt')
-            #torch.save(predictions_branch,'results/predictions_branch_guinee_cambodge.pt')
+        
         mean_height_rel_error,mean_weight_rel_error = calculate_mean_absolute_error_results(y_true,predictions)
         print(f'mean_height_rel_error = {mean_height_rel_error}')
         print(f'mean_weight_rel_error = {mean_weight_rel_error}')
         
         wandb.log({'epoch':epoch_num,'epoch_test_loss':average_loss, 'mean_height_rel_error':mean_height_rel_error, 'mean_weight_rel_error':mean_weight_rel_error})
+        
+        ## save predictions:
+        
+            if ((epoch_num%3 == 0) & (epoch_num!=0)):
+            torch.save(y_true,'results/y_true_guinee_mobilenet_v2.pt')
+            torch.save(predictions,f'results/predictions_guinee_mobilenet_v2_epoch_{epoch_num}.pt')
+            #torch.save(predictions_branch,'results/predictions_branch_guinee_cambodge.pt')
+        
 
         return mean_height_rel_error,mean_weight_rel_error,average_loss
 
