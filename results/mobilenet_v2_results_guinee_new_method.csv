@@ -1,0 +1,2 @@
+data,img_size,sexe,age,method_sex_age,seed,epochs,lr,height_rel_err,weight_rel_err
+guinee,384,True,True,4,0,20,0.005,0.06505694942474259,0.19499160220822281
