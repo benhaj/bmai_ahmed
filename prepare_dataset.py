@@ -159,13 +159,13 @@ def prepare_transforms(img_mean=IMG_MEAN,img_std=1):
     RandomRotation = transforms.RandomRotation((0,359), expand=False)
     
     composed = transforms.Compose([transforms.ToTensor(),
-                                   normalization,
-                                   colorJitter,
-                                   GaussianBlur,
-                                    RandomSolarize,
-                                    RandomHorizontalFlip,
-                                    RandomVerticalFlip,
-                                    RandomRotation])
+                                   normalization])
+#                                    colorJitter,
+#                                    GaussianBlur,
+#                                     RandomSolarize,
+#                                     RandomHorizontalFlip,
+#                                     RandomVerticalFlip,
+#                                     RandomRotation])
     
     #                               transforms.Resize((HEIGHT_SIZE,HEIGHT_SIZE)),
     #                           Pad(stride=8, pad_value=(0, 0, 0))
