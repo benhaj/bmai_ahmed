@@ -56,7 +56,8 @@ device = ('cuda' if torch.cuda.is_available() else 'cpu')
 print(device)
 
 model = model.to(device)
-
+run_name = f'{model_name}_cambodge_finetune_guinee_SEED{SEED}_{img_size}_SEXE_{SEXE}_AGE_{AGE}_lr_{lr}'
+wandb.init(project="new-sota-model",name=run_name)
 
 # Split data (train/test)
 train_size = 0.8
