@@ -40,7 +40,7 @@ dataset_guinee = bmaiDataset(csv_file=['/hdd/data/bmai_clean/full_guinee_data.cs
 dataset_cambodge = bmaiDataset(csv_file=['/hdd/data/bmai_clean/full_cambodge_data.csv'],img_size=img_size,transform=transforms)
 
 
-# In[6]:
+# In[7]:
 
 
 import numpy as np
@@ -58,24 +58,20 @@ print(device)
 model = model.to(device)
 
 
-# Data generators
-main_dataset = main_dataset
-finetune_dataset = finetune_dataset
-
 # Split data (train/test)
 train_size = 0.8
 
-num_train_entries = int(train_size * len(finetune_dataset))
-num_test_entries = len(finetune_dataset) - num_train_entries
-finetune_train_dataset, finetune_test_dataset = torch.utils.data.random_split(finetune_dataset, [num_train_entries, num_test_entries],generator=torch.Generator().manual_seed(SEED))
+num_train_entries = int(train_size * len(dataset_guinee))
+num_test_entries = len(dataset_guinee) - num_train_entries
+finetune_train_dataset, finetune_test_dataset = torch.utils.data.random_split(dataset_guinee, [num_train_entries, num_test_entries],generator=torch.Generator().manual_seed(SEED))
 
 # Data loaders :
 batch_size = 126
 num_workers = 16
 
-main_train_dataloader = DataLoader(main_dataset, batch_size=batch_size, shuffle=True,num_workers=num_workers)
-finetune_train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True,num_workers=num_workers)
-finetune_test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True,num_workers=num_workers)
+main_train_dataloader = DataLoader(dataset_cambodge, batch_size=batch_size, shuffle=True,num_workers=num_workers)
+finetune_train_dataloader = DataLoader(finetune_train_dataset, batch_size=batch_size, shuffle=True,num_workers=num_workers)
+finetune_test_dataloader = DataLoader(finetune_test_dataset, batch_size=batch_size, shuffle=True,num_workers=num_workers)
 
 # Loss function and stored losses
 losses = []
