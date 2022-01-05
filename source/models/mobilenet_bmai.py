@@ -78,6 +78,7 @@ class Mobilenet_bmai(nn.Module):
                 scores = self.last(self.classifier(self.features(imgs)))
                 mean_h_w = self.mean_prediction(torch.cat([age.float(),sexe.float()],dim=1))
                 scores = torch.add(scores, mean_h_w)
+                return scores,mean_h_w
             else:
                 feat = self.classifier(self.features(imgs))
                 concat = torch.cat([feat,sexe,age],dim=1).float()
