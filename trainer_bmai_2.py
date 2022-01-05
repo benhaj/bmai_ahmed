@@ -188,7 +188,7 @@ class BmaiTrainer:
             
             y_true.append(target.detach().numpy() if self.device=='cpu' else target.cpu().detach().numpy())                
             predictions.append(scores.detach().numpy() if self.device=='cpu' else scores.cpu().detach().numpy())
-            #predictions_branch.append(mean_h_w.cpu().detach().numpy())
+            predictions_branch.append(mean_h_w.cpu().detach().numpy())
              
             # loss
             loss = self.loss_fn(scores,target).sum()
@@ -200,7 +200,7 @@ class BmaiTrainer:
         
         y_true= np.vstack(y_true)
         predictions = np.vstack(predictions)
-        #predictions_branch = np.vstack(predictions_branch) #### JUST TO SEE BRANCH PREDICTIONS
+        predictions_branch = np.vstack(predictions_branch) #### JUST TO SEE BRANCH PREDICTIONS
         
         mean_height_rel_error,mean_weight_rel_error = calculate_mean_absolute_error_results(y_true,predictions)
         print(f'mean_height_rel_error = {mean_height_rel_error}')
@@ -210,10 +210,10 @@ class BmaiTrainer:
         
         ## save predictions:
         
-#         if ((epoch_num%3 == 0) & (epoch_num!=0)):
-#             torch.save(y_true,'results/y_true_guinee_mobilenet_v2.pt')
-#             torch.save(predictions,f'results/predictions_guinee_mobilenet_v2_epoch_{epoch_num}.pt')
-#             #torch.save(predictions_branch,'results/predictions_branch_guinee_cambodge.pt')
+        if ((epoch_num%3 == 0) & (epoch_num!=0)):
+            torch.save(y_true,'results/y_true_guinee_cambodge_mobilenet_v2_with_branch.pt')
+            torch.save(predictions,f'results/predictions_guinee_cambodge_mobilenet_v2_with_branch_epoch_{epoch_num}.pt')
+            torch.save(predictions_branch,f'results/predictions_guinee_cambodge_with_branch_epoch_{epoch_num}.pt')
         
 
         return mean_height_rel_error,mean_weight_rel_error,average_loss

@@ -87,7 +87,7 @@ class bmaiDataset(Dataset):
         return img , y_label
 
 ### RESCALE (https://pytorch.org/tutorials/beginner/data_loading_tutorial.html)
-
+    
 class Rescale(object):
     """Rescale the image in a sample to a given size.
 
@@ -102,7 +102,7 @@ class Rescale(object):
         self.output_size = output_size
 
     def __call__(self, sample):
-        
+        print('call')
         h, w, c = sample.shape[:]
         
         if h>=w:
@@ -112,7 +112,7 @@ class Rescale(object):
             ratio = w/self.output_size
             new_h, new_w = round(h / ratio), round(w / ratio)
         
-        img = transform.resize(sample, (new_h, self.output_size, c))
+        img = transform.resize(sample, (new_h, new_w, c))
         out = torch.from_numpy(img).permute(2,0,1)
         return out
 
@@ -143,9 +143,10 @@ class Pad(object):
     
     def __call__(self, sample):
         img = sample.permute(1,2,0).numpy()
-        min_dims = [HEIGHT_SIZE, max(img.shape[1], HEIGHT_SIZE)]
+        min_dims = [max(sample.shape[0], HEIGHT_SIZE), max(img.shape[1], HEIGHT_SIZE)]
         padded_img = pad_width(img, self.stride, self.pad_value,min_dims)
-        return torch.from_numpy(padded_img).permute(2, 0, 1).float()
+        return torch.from_numpy(padded_img[0]).permute(2, 0, 1).float()
+
 
 
     
