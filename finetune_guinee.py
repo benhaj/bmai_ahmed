@@ -40,26 +40,7 @@ dataset_guinee = bmaiDataset(csv_file=['/hdd/data/bmai_clean/full_guinee_data.cs
 dataset_cambodge = bmaiDataset(csv_file=['/hdd/data/bmai_clean/full_cambodge_data.csv'],img_size=img_size,transform=transforms)
 
 
-# In[ ]:
-
-
-## TRAINER:
-
-#wandb initialization
-run_name = f'{model_name}_Full_cambodge_finetuned_guinee_{img_size}_SEXE_{SEXE}_AGE_{AGE}_2_50_epochs_lr_{args.lr}'
-
-wandb.init(project="new-sota-model",name=run_name)
-
-trainer = BmaiTrainer(model, dataset, seed=args.SEED, img_size=args.img_size, AGE=AGE, SEXE=SEXE, method_sex_age=args.method_sex_age , batch_size=args.batch_size, lr = args.lr, epochs=args.epochs, num_workers=args.num_workers)
-best_ , results,mean_training_loss = trainer.train()
-torch.save(trainer.model,f'results/{run_name}.pt')
-#     results.to_csv(f'results/{run_name}.csv',index=False)
-
-summary_df = pd.json_normalize(create_df_entry(args,best_))
-summary_df.to_csv(f'results/mobilenet_v2_results_with_age_sexe_branch.csv', mode='a', header=False,index=False)
-
-
-# In[ ]:
+# In[6]:
 
 
 import numpy as np
@@ -72,9 +53,9 @@ import pandas as pd
 import wandb
 
 device = ('cuda' if torch.cuda.is_available() else 'cpu')
-print(self.device)
+print(device)
 
-model = model.to(self.device)
+model = model.to(device)
 
 
 # Data generators
@@ -101,13 +82,13 @@ losses = []
 batch_losses = []
 
 
-def loss_fn(self,y_pred,y_true):
+def loss_fn(y_pred,y_true):
     diff = torch.abs(y_pred-y_true)
-    return torch.where(diff < (0.05*y_true),torch.zeros(1, 2,dtype=float).to(self.device),diff)
+    return torch.where(diff < (0.05*y_true),torch.zeros(1, 2,dtype=float).to(device),diff)
 
 
 #### TRAIN (on Cambodge)
-def train_cambodge(model)
+def train_cambodge(model):
     epochs = 3
     model.train()
 
@@ -115,7 +96,7 @@ def train_cambodge(model)
     optimizer = optim.Adam(model.parameters(),lr=lr)
 
     # capture a dictionary of hyperparameters with config
-    wandb.config = {"learning_rate": lr, "epochs": epochs, "batch_size": self.batch_size}
+    wandb.config = {"learning_rate": lr, "epochs": epochs, "batch_size": batch_size}
     # optional: track gradients
     wandb.watch(model)
 
@@ -126,26 +107,26 @@ def train_cambodge(model)
     for epoch in range(epochs):
 
         batch_losses = []
-        for batch_idx, data in enumerate(self.main_train_dataloader):
+        for batch_idx, data in enumerate(main_train_dataloader):
 
 
              ## data in form ['img',sexe','days','height','weight']
 
-            imgs = data[0].to(self.device)
+            imgs = data[0].to(device)
             target = data[1:][0]
             num_elems_in_batch = target.shape[0]
 
 
             ## sex and age :
-            sexe = target[:,0].reshape((num_elems_in_batch,1)).to(self.device)
-            age = target[:,1].reshape((num_elems_in_batch,1)).to(self.device)
+            sexe = target[:,0].reshape((num_elems_in_batch,1)).to(device)
+            age = target[:,1].reshape((num_elems_in_batch,1)).to(device)
 
             ## Target:
-            target = target[:,2:].to(self.device)
+            target = target[:,2:].to(device)
 
             scores,_ = model(imgs,age,sexe)
 
-            loss = self.loss_fn(scores,target).sum()
+            loss = loss_fn(scores,target).sum()
 
             # backward
             optimizer.zero_grad()
@@ -157,7 +138,7 @@ def train_cambodge(model)
             batch_losses.append(loss.item())
 
             # Display status
-            message = f'epoch: {epoch}/{self.epochs-1}, batch {batch_idx}/{len(self.train_dataloader)-1}, loss: {loss.item()}' 
+            message = f'epoch: {epoch}/{epochs-1}, batch {batch_idx}/{len(train_dataloader)-1}, loss: {loss.item()}' 
             print(message)
 
         epoch_loss = np.mean(batch_losses)
@@ -174,7 +155,7 @@ def finetune_guinee(model):
     epochs = 51
 
     # capture a dictionary of hyperparameters with config
-    wandb.config = {"learning_rate": lr, "epochs": epochs, "batch_size": self.batch_size}
+    wandb.config = {"learning_rate": lr, "epochs": epochs, "batch_size": batch_size}
     # optional: track gradients
     wandb.watch(model)
 
@@ -185,26 +166,26 @@ def finetune_guinee(model):
     for epoch in range(epochs):
 
         batch_losses = []
-        for batch_idx, data in enumerate(self.finetune_train_dataloader):
+        for batch_idx, data in enumerate(finetune_train_dataloader):
 
 
              ## data in form ['img',sexe','days','height','weight']
 
-            imgs = data[0].to(self.device)
+            imgs = data[0].to(device)
             target = data[1:][0]
             num_elems_in_batch = target.shape[0]
 
 
             ## sex and age :
-            sexe = target[:,0].reshape((num_elems_in_batch,1)).to(self.device)
-            age = target[:,1].reshape((num_elems_in_batch,1)).to(self.device)
+            sexe = target[:,0].reshape((num_elems_in_batch,1)).to(device)
+            age = target[:,1].reshape((num_elems_in_batch,1)).to(device)
 
             ## Target:
-            target = target[:,2:].to(self.device)
+            target = target[:,2:].to(device)
 
             scores,_ = model(imgs,age,sexe)
 
-            loss = self.loss_fn(scores,target).sum()
+            loss = loss_fn(scores,target).sum()
 
             # backward
             optimizer.zero_grad()
@@ -216,7 +197,7 @@ def finetune_guinee(model):
             batch_losses.append(loss.item())
 
             # Display status
-            message = f'epoch: {epoch}/{self.epochs-1}, batch {batch_idx}/{len(self.train_dataloader)-1}, loss: {loss.item()}' 
+            message = f'epoch: {epoch}/{epochs-1}, batch {batch_idx}/{len(train_dataloader)-1}, loss: {loss.item()}' 
             print(message)
 
         epoch_loss = np.mean(batch_losses)
@@ -239,37 +220,37 @@ def test(epoch_num):
     y_true = []
     predictions = []
     predictions_branch = []
-    for batch_idx, data in enumerate(self.finetune_test_dataloader):
+    for batch_idx, data in enumerate(finetune_test_dataloader):
 
 
          ## data in form ['img',sexe','days','height','weight']
 
-        imgs = data[0].to(self.device)
+        imgs = data[0].to(device)
         target = data[1:][0]
         num_elems_in_batch = target.shape[0]                ## Forward
-        imgs = data[0].to(self.device)
+        imgs = data[0].to(device)
         target = data[1:][0]
         num_elems_in_batch = target.shape[0]
 
 
         ## sex and age :
-        sexe = target[:,0].reshape((num_elems_in_batch,1)).to(self.device)
-        age = target[:,1].reshape((num_elems_in_batch,1)).to(self.device)
+        sexe = target[:,0].reshape((num_elems_in_batch,1)).to(device)
+        age = target[:,1].reshape((num_elems_in_batch,1)).to(device)
 
         ## Target:
-        target = target[:,2:].to(self.device)
+        target = target[:,2:].to(device)
 
         ## Forward
         scores,mean_h_w = model(imgs,age,sexe)
 
 
-        y_true.append(target.detach().numpy() if self.device=='cpu' else target.cpu().detach().numpy())                
-        predictions.append(scores.detach().numpy() if self.device=='cpu' else scores.cpu().detach().numpy())
+        y_true.append(target.detach().numpy() if device=='cpu' else target.cpu().detach().numpy())                
+        predictions.append(scores.detach().numpy() if device=='cpu' else scores.cpu().detach().numpy())
         predictions_branch.append(mean_h_w.cpu().detach().numpy())
 
         # loss
-        loss = self.loss_fn(scores,target).sum()
-        batch_losses.append(loss.item() if self.device=='cpu' else loss.cpu().item())
+        loss = loss_fn(scores,target).sum()
+        batch_losses.append(loss.item() if device=='cpu' else loss.cpu().item())
 
 
     average_loss = np.mean(batch_losses)
@@ -318,4 +299,10 @@ model = train_cambodge(model)
 best_rel_err, results, _ = finetune_guinee(model)
 print(f'best scores : {best_rel_err}')
 results.to_csv('results/fintuning_guinee.csv')
+
+
+# In[ ]:
+
+
+
 
