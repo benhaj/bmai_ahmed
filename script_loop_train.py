@@ -24,7 +24,7 @@ SEXEs =['False','True']
 
 IMG_SIZEs = [256,384]
 
-for data_name in data[:1]:
+for data_name in data[1:2]:
     for img_size in IMG_SIZEs[1:]:
         for AGE in AGEs[1:]:
             for SEXE in SEXEs[1:]:

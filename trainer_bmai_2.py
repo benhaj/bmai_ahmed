@@ -211,9 +211,9 @@ class BmaiTrainer:
         ## save predictions:
         
         if ((epoch_num%3 == 0) & (epoch_num!=0)):
-            torch.save(y_true,'results/y_true_guinee_mobilenet_v2_with_branch.pt')
-            torch.save(predictions,f'results/predictions_guinee_mobilenet_v2_with_branch.pt')
-            torch.save(predictions_branch,f'results/branch_predictions_guinee_mobilenet_v2_with_branch.pt')
+            torch.save(y_true,'results/y_true_cambodge_mobilenet_v2_with_branch.pt')
+            torch.save(predictions,f'results/predictions_cambodge_mobilenet_v2_with_branch.pt')
+            torch.save(predictions_branch,f'results/branch_cambodge_guinee_mobilenet_v2_with_branch.pt')
         
 
         return mean_height_rel_error,mean_weight_rel_error,average_loss
