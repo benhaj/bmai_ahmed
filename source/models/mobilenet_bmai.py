@@ -98,7 +98,7 @@ class Mobilenet_bmai(nn.Module):
             classi = self.classifier(feat)
             scores = self.last(classi)
         
-        return scores
+        return scores, 0
            
 
 def classifier_method_1(img_size):
