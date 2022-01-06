@@ -88,16 +88,16 @@ def loss_fn(y_pred,y_true):
 optimizer = optim.Adam(model.parameters(),lr=lr)
 
 #### TRAIN (on Cambodge)
+full_epochs = 4
+finetune_epochs = 51
+# capture a dictionary of hyperparameters with config
+wandb.config = {"learning_rate": lr, "epochs": epochs, "batch_size": batch_size}
+# optional: track gradients
+wandb.watch(model)
+
 def train_cambodge(model):
-    epochs = 3
+    results = pd.DataFrame(columns=['mean_height_rel_error','mean_weight_rel_error'])
     model.train()
-
-
-    # capture a dictionary of hyperparameters with config
-    wandb.config = {"learning_rate": lr, "epochs": epochs, "batch_size": batch_size}
-    # optional: track gradients
-    wandb.watch(model)
-
 
     results = pd.DataFrame(columns=['mean_height_rel_error','mean_weight_rel_error'])
     epoch_losses=[]
@@ -146,9 +146,12 @@ def train_cambodge(model):
 
         print(f'for epoch {epoch} , average loss is {epoch_loss}')
         epoch_losses.append(epoch_loss)
-    return model
+        
+        best_rel_err, results, results =finetune_guinee(model,results)
+        print(best_rel_err)
+    return results
 
-def finetune_guinee(model):    
+def finetune_guinee(model,results):    
     ### Finetune on guinee
     epochs = 51
 
@@ -158,7 +161,6 @@ def finetune_guinee(model):
     wandb.watch(model)
 
 
-    results = pd.DataFrame(columns=['mean_height_rel_error','mean_weight_rel_error'])
     epoch_losses=[]
 
     for epoch in range(epochs):
@@ -264,12 +266,12 @@ def test(epoch_num):
 
     wandb.log({'epoch':epoch_num,'epoch_test_loss':average_loss, 'mean_height_rel_error':mean_height_rel_error, 'mean_weight_rel_error':mean_weight_rel_error})
 
-    ## save predictions:
+#     ## save predictions:
 
-    if ((epoch_num>=20 == 0) & (epoch_num%5 == 0) & (epoch_num!=0)):
-        torch.save(y_true,'results/y_true_guinee_cambodge_mobilenet_v2_with_branch.pt')
-        torch.save(predictions,f'results/predictions_guinee_cambodge_mobilenet_v2_with_branch_epoch_{epoch_num}.pt')
-        torch.save(predictions_branch,f'results/predictions_guinee_cambodge_with_branch_epoch_{epoch_num}.pt')
+#     if ((epoch_num>=20 == 0) & (epoch_num%5 == 0) & (epoch_num!=0)):
+#         torch.save(y_true,'results/y_true_guinee_cambodge_mobilenet_v2_with_branch.pt')
+#         torch.save(predictions,f'results/predictions_guinee_cambodge_mobilenet_v2_with_branch_epoch_{epoch_num}.pt')
+#         torch.save(predictions_branch,f'results/predictions_guinee_cambodge_with_branch_epoch_{epoch_num}.pt')
 
 
     return mean_height_rel_error,mean_weight_rel_error,average_loss
@@ -293,9 +295,7 @@ def calculate_mean_absolute_error_results(y_true,predictions):
     return mean_height_rel_error,mean_weight_rel_error
 
 
-model = train_cambodge(model)
-best_rel_err, results, _ = finetune_guinee(model)
-print(f'best scores : {best_rel_err}')
+results = train_cambodge(model)
 results.to_csv('results/fintuning_guinee.csv')
 
 
