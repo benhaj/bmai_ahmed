@@ -70,7 +70,7 @@ batch_losses = []
 
 def loss_fn(y_pred,y_true):
     diff = torch.abs(y_pred-y_true)
-    return torch.where(diff < (0.05*y_true),torch.zeros(1, 2,dtype=float).to(self.device),diff)
+    return torch.where(diff < (0.05*y_true),torch.zeros(1, 2,dtype=float).to(device),diff)
     
 def test():
     model.eval()
