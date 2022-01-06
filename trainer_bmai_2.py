@@ -208,12 +208,12 @@ class BmaiTrainer:
         
         wandb.log({'epoch':epoch_num,'epoch_test_loss':average_loss, 'mean_height_rel_error':mean_height_rel_error, 'mean_weight_rel_error':mean_weight_rel_error})
         
-#         ## save predictions:
+        ## save predictions:
         
-#         if ((epoch_num%3 == 0) & (epoch_num!=0)):
-#             torch.save(y_true,'results/y_true_guinee_cambodge_mobilenet_v2_with_branch.pt')
-#             torch.save(predictions,f'results/predictions_guinee_cambodge_mobilenet_v2_with_branch_epoch_{epoch_num}.pt')
-#             torch.save(predictions_branch,f'results/predictions_guinee_cambodge_with_branch_epoch_{epoch_num}.pt')
+        if ((epoch_num%3 == 0) & (epoch_num!=0)):
+            torch.save(y_true,'results/y_true_guinee_mobilenet_v2_with_branch.pt')
+            torch.save(predictions,f'results/predictions_guinee_mobilenet_v2_with_branch.pt')
+            torch.save(predictions_branch,f'results/branch_predictions_guinee_mobilenet_v2_with_branch.pt')
         
 
         return mean_height_rel_error,mean_weight_rel_error,average_loss

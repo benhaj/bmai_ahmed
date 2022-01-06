@@ -62,15 +62,13 @@ def main(args):
 
     trainer = BmaiTrainer(model, dataset, seed=args.SEED, img_size=args.img_size, AGE=AGE, SEXE=SEXE, method_sex_age=args.method_sex_age , batch_size=args.batch_size, lr = args.lr, epochs=args.epochs, num_workers=args.num_workers)
     best_ , results,mean_training_loss = trainer.train()
-    torch.save(trainer.model,f'results/best_model_mobilenet_v2_cambodge.pt')
+#     torch.save(trainer.model,f'results/best_model_mobilenet_v2_cambodge.pt')
 #     results.to_csv(f'results/{run_name}.csv',index=False)
 
 #     summary_df = pd.json_normalize(create_df_entry(args,best_))
 #     summary_df.to_csv(f'results/mobilenet_v2_results_with_age_sexe_in_regression.csv', mode='a', header=False,index=False)
-    #y_true,predictions,average_loss = trainer.test()
 
 if __name__ == '__main__':
-    ## parser = argparse.ArgumentParser('Demo', parents=[get_args_parser()])
     parser = get_args_parser()
     args = parser.parse_args()
     main(args)
