@@ -62,7 +62,7 @@ train_dataset, test_dataset = torch.utils.data.random_split(dataset_guinee,[num_
 batch_size = 64
 num_workers = 16
 
-test_dataloader = DataLoader(finetune_test_dataset, batch_size=batch_size, shuffle=True,num_workers=num_workers)
+test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True,num_workers=num_workers)
 
 # Loss function and stored losses
 losses = []
@@ -75,7 +75,7 @@ def test():
     y_true = []
     predictions = []
     predictions_branch = []
-    for batch_idx, data in enumerate(test_dataset):
+    for batch_idx, data in enumerate(test_dataloader):
 
 
          ## data in form ['img',sexe','days','height','weight']
