@@ -125,9 +125,9 @@ def test():
 #     wandb.log({'epoch':epoch_num,'epoch_test_loss':average_loss, 'mean_height_rel_error':mean_height_rel_error, 'mean_weight_rel_error':mean_weight_rel_error})
 
 
-    torch.save(y_true,'results/y_true_guinee_cambodge_mobilenet_v2_with_branch.pt')
-    torch.save(predictions,f'results/predictions_guinee_cambodge_mobilenet_v2_with_branch_epoch_{epoch_num}.pt')
-    torch.save(predictions_branch,f'results/predictions_guinee_cambodge_with_branch_epoch_{epoch_num}.pt')
+    torch.save(y_true,'results/y_true_cambodge_on_guinee_mobilenet_v2_with_branch.pt')
+    torch.save(predictions,f'results/predictions_cambodge_on_guinee_mobilenet_v2_with_branch.pt')
+    torch.save(predictions_branch,f'results/branch_predictions_cambodge_on_guinee_mobilenet_v2_with_branch.pt')
 
 
     return mean_height_rel_error,mean_weight_rel_error#,average_loss
