@@ -68,7 +68,10 @@ test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True,n
 losses = []
 batch_losses = []
 
-
+def loss_fn(self,y_pred,y_true):
+    diff = torch.abs(y_pred-y_true)
+    return torch.where(diff < (0.05*y_true),torch.zeros(1, 2,dtype=float).to(self.device),diff)
+    
 def test():
     model.eval()
     batch_losses = []
