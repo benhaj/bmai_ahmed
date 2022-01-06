@@ -66,7 +66,7 @@ def main(args):
 #     results.to_csv(f'results/{run_name}.csv',index=False)
 
     summary_df = pd.json_normalize(create_df_entry(args,best_))
-    summary_df.to_csv(f'results/mobilenet_v2_results_with_age_sexe_branch.csv', mode='a', header=False,index=False)
+    summary_df.to_csv(f'results/mobilenet_v2_results_with_age_sexe_in_regression.csv', mode='a', header=False,index=False)
     #y_true,predictions,average_loss = trainer.test()
 
 if __name__ == '__main__':
