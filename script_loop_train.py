@@ -31,7 +31,7 @@ for data_name in data[1:2]:
                 for SEED in [0]:#,1,2,3]:
                     if data_name=='guinee':
                         epochs=30
-                        os.system(f'python demo_bmai.py --model_name mobilenet --data_name {data_name} --SEED {SEED} --img_size {img_size} --SEXE {SEXE} --AGE {AGE} --method_sex_age 2 --epochs {epochs} --lr 0.005 --batch_size 64 --num_workers 16')
+                        os.system(f'python demo_bmai.py --model_name mobilenet --data_name {data_name} --SEED {SEED} --img_size {img_size} --SEXE {SEXE} --AGE {AGE} --method_sex_age 4 --epochs {epochs} --lr 0.005 --batch_size 64 --num_workers 16')
                     else:
                         epochs=30
-                        os.system(f'python demo_bmai.py --model_name mobilenet --data_name {data_name} --SEED {SEED} --img_size {img_size} --SEXE {SEXE} --AGE {AGE} --method_sex_age 2 --epochs {epochs} --lr 0.005 --batch_size 64 --num_workers 16')
+                        os.system(f'python demo_bmai.py --model_name mobilenet --data_name {data_name} --SEED {SEED} --img_size {img_size} --SEXE {SEXE} --AGE {AGE} --method_sex_age 4 --epochs {epochs} --lr 0.005 --batch_size 64 --num_workers 16')
