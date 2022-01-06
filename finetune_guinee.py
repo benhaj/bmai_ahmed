@@ -17,19 +17,19 @@ from source.models.OpenPose_bmai import *
 # In[ ]:
 
 
-img_size = 386
+img_size = 384
 model_name = 'mobilenet_v2'
 SEXE=True
 AGE=True
 lr=0.005
 SEED=0
-method_sex_age=4
+method_sex_age=0
 
 
 # In[2]:
 
 
-model = Mobilenet_bmai(386,SEXE=True, AGE=True, method_sex_age = 4)
+model = Mobilenet_bmai(img_size,SEXE=True, AGE=True, method_sex_age = 4)
 
 
 # In[ ]:
@@ -67,7 +67,7 @@ num_test_entries = len(dataset_guinee) - num_train_entries
 finetune_train_dataset, finetune_test_dataset = torch.utils.data.random_split(dataset_guinee, [num_train_entries, num_test_entries],generator=torch.Generator().manual_seed(SEED))
 
 # Data loaders :
-batch_size = 126
+batch_size = 64
 num_workers = 16
 
 main_train_dataloader = DataLoader(dataset_cambodge, batch_size=batch_size, shuffle=True,num_workers=num_workers)
@@ -84,13 +84,14 @@ def loss_fn(y_pred,y_true):
     return torch.where(diff < (0.05*y_true),torch.zeros(1, 2,dtype=float).to(device),diff)
 
 
+## create optimizer
+optimizer = optim.Adam(model.parameters(),lr=lr)
+
 #### TRAIN (on Cambodge)
 def train_cambodge(model):
     epochs = 3
     model.train()
 
-    ## create optimizer
-    optimizer = optim.Adam(model.parameters(),lr=lr)
 
     # capture a dictionary of hyperparameters with config
     wandb.config = {"learning_rate": lr, "epochs": epochs, "batch_size": batch_size}
@@ -130,12 +131,12 @@ def train_cambodge(model):
             loss.backward()
 
             # optimizer step
-            optimizer.step()              
+            optimizer.step()
 
             batch_losses.append(loss.item())
 
             # Display status
-            message = f'epoch: {epoch}/{epochs-1}, batch {batch_idx}/{len(train_dataloader)-1}, loss: {loss.item()}' 
+            message = f'epoch: {epoch}/{epochs-1}, batch {batch_idx}/{len(main_train_dataloader)-1}, loss: {loss.item()}' 
             print(message)
 
         epoch_loss = np.mean(batch_losses)
@@ -194,7 +195,7 @@ def finetune_guinee(model):
             batch_losses.append(loss.item())
 
             # Display status
-            message = f'epoch: {epoch}/{epochs-1}, batch {batch_idx}/{len(train_dataloader)-1}, loss: {loss.item()}' 
+            message = f'epoch: {epoch}/{epochs-1}, batch{batch_idx}/{len(finetune_train_dataloader)-1}, loss: {loss.item()}'
             print(message)
 
         epoch_loss = np.mean(batch_losses)
