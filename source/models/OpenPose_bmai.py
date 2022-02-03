@@ -42,9 +42,8 @@ class Baseline_1(nn.Module):
                 param.requires_grad = False
 
         self.last = nn.Sequential(
-            conv_dw(512, 64),
             conv_dw(64, 1),
-            nn.Dropout(0.2),
+#             nn.Dropout(0.1),
             nn.Flatten(),
             nn.Linear(in_features=self.in_features,out_features=1024),
             nn.ReLU(),
@@ -325,9 +324,6 @@ class PoseEstimationWithMobileNet(nn.Module):
 #                 refinement_stage(torch.cat([backbone_features, stages_output[-2], stages_output[-1]], dim=1)))
         
     ## select pafs, arrange channels and sum them
-        print(stages_output.shape)
-        pafs = torch.unsqueeze(stages_output, 1)
-        print(pafs.shape)
         pafs = transforms.Resize((192, 192), interpolation=transforms.InterpolationMode.BICUBIC)(pafs)
         print(pafs.shape)
         return pafs
