@@ -192,7 +192,7 @@ class BmaiTrainer:
         
         y_true= np.vstack(y_true)
         predictions = np.vstack(predictions)
-        predictions_branch = np.vstack(predictions_branch) #### JUST TO SEE BRANCH PREDICTIONS
+#         predictions_branch = np.vstack(predictions_branch) #### JUST TO SEE BRANCH PREDICTIONS
         
         mean_height_rel_error,mean_weight_rel_error = calculate_mean_absolute_error_results(y_true,predictions)
         print(f'mean_height_rel_error = {mean_height_rel_error}')
