@@ -325,6 +325,7 @@ class PoseEstimationWithMobileNet(nn.Module):
 #                 refinement_stage(torch.cat([backbone_features, stages_output[-2], stages_output[-1]], dim=1)))
         ## select pafs, arrange channels and sum them
         pafs = stages_output[-1]
+        print(pafs.shape)
         pafs = transforms.Resize((192, 192), interpolation=transforms.InterpolationMode.BICUBIC)(pafs)
         return torch.sum(pafs,dim=1)
 
