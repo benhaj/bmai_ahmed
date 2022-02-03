@@ -111,7 +111,7 @@ class BmaiTrainer:
                 target = target[:,2:].to(self.device)
 
                 scores = model(imgs,age,sexe)
-                            
+                print(type(target))
                 loss = self.loss_fn(scores,target).sum()
                 
                 # backward
