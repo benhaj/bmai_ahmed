@@ -1,2 +1,0 @@
-usage: demo_bmai.py [--model_name MODEL_NAME] [--data_name DATA_NAME] [--SEXE SEXE] [--AGE AGE] [--epochs EPOCHS] [--lr LR] [--batch_size BATCH_SIZE] [--num_workers NUM_WORKERS]
-demo_bmai.py: error: argument --lr: invalid int value: '0.01'
