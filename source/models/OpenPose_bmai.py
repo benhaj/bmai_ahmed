@@ -284,8 +284,8 @@ class RefinementStage(nn.Module):
         trunk_features = self.trunk(x)
         heatmaps = self.heatmaps(trunk_features)
         pafs = self.pafs(trunk_features)
-        return [heatmaps, pafs]
-#         return torch.sum(pafs,dim=1)
+#         return [heatmaps, pafs]
+        return torch.sum(pafs,dim=1)
 
 
 class PoseEstimationWithMobileNet(nn.Module):
@@ -320,10 +320,11 @@ class PoseEstimationWithMobileNet(nn.Module):
         backbone_features = self.cpm(backbone_features)
 
         stages_output = self.initial_stage(backbone_features)
-#         for refinement_stage in self.refinement_stages:
-#             stages_output.extend(
-#                 refinement_stage(torch.cat([backbone_features, stages_output[-2], stages_output[-1]], dim=1)))
-        ## select pafs, arrange channels and sum them
+        for refinement_stage in self.refinement_stages:
+            stages_output.extend(
+                refinement_stage(torch.cat([backbone_features, stages_output[-2], stages_output[-1]], dim=1)))
+        
+    ## select pafs, arrange channels and sum them
         pafs = stages_output[-1]
         print(pafs.shape)
         pafs = transforms.Resize((192, 192), interpolation=transforms.InterpolationMode.BICUBIC)(pafs)
