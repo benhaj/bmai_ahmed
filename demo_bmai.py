@@ -6,11 +6,12 @@
 
 import numpy as np
 import argparse
-from prepare_dataset import *
-from source.models.mobilenet_bmai import *
-from trainer_bmai_2 import *
 import torchvision
 import torch
+
+from source.datasets.bmai_dataset import *
+from source.models.mobilenet_bmai import *
+from trainer_bmai_2 import *
 from source.models.OpenPose_bmai import *
 
 
