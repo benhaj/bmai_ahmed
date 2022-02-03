@@ -42,8 +42,9 @@ class Baseline_1(nn.Module):
                 param.requires_grad = False
 
         self.last = nn.Sequential(
+            conv_dw(512, 64),
             conv_dw(64, 1),
-#             nn.Dropout(0.1),
+            nn.Dropout(0.2),
             nn.Flatten(),
             nn.Linear(in_features=self.in_features,out_features=1024),
             nn.ReLU(),
@@ -242,8 +243,8 @@ class InitialStage(nn.Module):
         heatmaps = self.heatmaps(trunk_features)
         pafs = self.pafs(trunk_features)
 #         return [heatmaps, pafs]
-#         return torch.sum(pafs,axis=1)
-        return pafs
+        print(pafs.shape)
+        return torch.sum(pafs,axis=2)
 
 class RefinementStageBlock(nn.Module):
     def __init__(self, in_channels, out_channels):
@@ -284,7 +285,7 @@ class RefinementStage(nn.Module):
         heatmaps = self.heatmaps(trunk_features)
         pafs = self.pafs(trunk_features)
 #         return [heatmaps, pafs]
-        return pafs
+        return torch.sum(pafs,dim=1)
 
 
 class PoseEstimationWithMobileNet(nn.Module):
@@ -319,16 +320,14 @@ class PoseEstimationWithMobileNet(nn.Module):
         backbone_features = self.cpm(backbone_features)
 
         stages_output = self.initial_stage(backbone_features)
-#         for refinement_stage in self.refinement_stages:
-#             stages_output.extend(
-#                 refinement_stage(torch.cat([backbone_features, stages_output[-2], stages_output[-1]], dim=1)))
+        for refinement_stage in self.refinement_stages:
+            stages_output.extend(
+                refinement_stage(torch.cat([backbone_features, stages_output[-2], stages_output[-1]], dim=1)))
         
     ## select pafs, arrange channels and sum them
-        print(stages_output.shape)
-        pafs = transforms.Resize((192, 192), interpolation=transforms.InterpolationMode.BICUBIC)(stages_output)
-#         pafs=torch.unsqueeze(pafs, 1)
-        return pafs
-#         return torch.sum(pafs,dim=1)
+        pafs = stages_output[-1]
+        pafs = transforms.Resize((192, 192), interpolation=transforms.InterpolationMode.BICUBIC)(pafs)
+        return torch.sum(pafs,dim=1)
 
 
 def prepare_OpenPose_model(name,freeze=True,method_age_sex=0):

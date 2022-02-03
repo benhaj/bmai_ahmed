@@ -206,8 +206,8 @@ class BmaiTrainer:
             min_ = (results.mean_height_rel_error.min(), mean_weight_rel_error.min())
             mean_ = np.mean(min_)
             if np.mean((mean_height_rel_error,mean_weight_rel_error))<= mean_:
-                torch.save(y_true,'results/y_true_guinee_fullOpenPose.pt')
-                torch.save(predictions,f'results/predictions_guinee_fullOpenPose.pt')
+                torch.save(y_true,'results/y_true_guinee_mobilenet_v1_OpenPose.pt')
+                torch.save(predictions,f'results/predictions_guinee_mobilenet_v1_OpenPose.pt')
 #                 torch.save(predictions_branch,f'results/branch_cambodge_guinee_mobilenet_v2_with_branch.pt')
         
 
