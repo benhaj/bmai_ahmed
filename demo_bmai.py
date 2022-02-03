@@ -11,7 +11,7 @@ import torch
 
 from source.datasets.bmai_dataset import *
 from source.models.mobilenet_bmai import *
-from trainer_bmai_2 import *
+from trainer_bmai import *
 from source.models.OpenPose_bmai import *
 
 
@@ -58,7 +58,7 @@ def main(args):
     ## TRAINER:
     
     #wandb initialization
-    run_name =f'{args.model_name}_Full_{args.data_name}_SEED{args.SEED}_{args.img_size}_SEXE_{SEXE}_AGE_{AGE}_method_{args.method_sex_age}_{args.epochs}_epochs_lr_{args.lr}'
+       run_name=f'{args.model_name}_Full_{args.data_name}_SEED{args.SEED}_{args.img_size}_SEXE_{SEXE}_AGE_{AGE}_method_{args.method_sex_age}_{args.epochs}_epochs_lr_{args.lr}'
     wandb.init(project="new-sota-model",name=run_name)
 
     trainer = BmaiTrainer(model, dataset, seed=args.SEED, img_size=args.img_size, AGE=AGE, SEXE=SEXE, method_sex_age=args.method_sex_age , batch_size=args.batch_size, lr = args.lr, epochs=args.epochs, num_workers=args.num_workers)

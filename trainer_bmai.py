@@ -139,16 +139,15 @@ class BmaiTrainer:
             print(f'for epoch {epoch} , average loss is {epoch_loss}')
             epoch_losses.append(epoch_loss)
             
-            mean_height_rel_error, mean_weight_rel_error, avg_test_loss = self.test(epoch)
+            results, avg_test_loss = self.test(epoch,results)
 
-            results.loc[epoch] = [mean_height_rel_error,mean_weight_rel_error]
 
         best_rel_err = (results.mean_height_rel_error.min(),results.mean_weight_rel_error.min())
 
         return best_rel_err, results, np.mean(epoch_losses)
     
     
-    def test(self,epoch_num):
+    def test(self,epoch_num,results):
         """
         :param epochs: number of iterations over the training dataset to perform.
         :return: None.
@@ -205,18 +204,22 @@ class BmaiTrainer:
         mean_height_rel_error,mean_weight_rel_error = calculate_mean_absolute_error_results(y_true,predictions)
         print(f'mean_height_rel_error = {mean_height_rel_error}')
         print(f'mean_weight_rel_error = {mean_weight_rel_error}')
+        results.loc[epoch_num] = [mean_height_rel_error,mean_weight_rel_error]
         
         wandb.log({'epoch':epoch_num,'epoch_test_loss':average_loss, 'mean_height_rel_error':mean_height_rel_error, 'mean_weight_rel_error':mean_weight_rel_error})
         
         ## save predictions:
-        
-        if ((epoch_num%3 == 0) & (epoch_num!=0)):
-            torch.save(y_true,'results/y_true_cambodge_mobilenet_v2_with_branch.pt')
-            torch.save(predictions,f'results/predictions_cambodge_mobilenet_v2_with_branch.pt')
-            torch.save(predictions_branch,f'results/branch_cambodge_guinee_mobilenet_v2_with_branch.pt')
+
+        if (epoch_num != 0):
+            min_ = (results.mean_height_rel_error.min(), mean_weight_rel_error.min())
+            mean_ = np.mean(min_)
+            if np.mean((mean_height_rel_error,mean_weight_rel_error))<= mean_:
+                torch.save(y_true,'results/y_true_guinee_fullOpenPose.pt')
+                torch.save(predictions,f'results/predictions_guinee_fullOpenPose.pt')
+#                 torch.save(predictions_branch,f'results/branch_cambodge_guinee_mobilenet_v2_with_branch.pt')
         
 
-        return mean_height_rel_error,mean_weight_rel_error,average_loss
+        return results,average_loss
 
 
 
