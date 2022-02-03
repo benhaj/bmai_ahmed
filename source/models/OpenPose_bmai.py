@@ -328,7 +328,7 @@ class PoseEstimationWithMobileNet(nn.Module):
         print(stages_output.shape)
         pafs = stages_output[-1]
         print(pafs.shape)
-        pafs = transforms.Resize((192, 192), interpolation=transforms.InterpolationMode.BICUBIC)(pafs)
+        pafs = transforms.Resize((192, 192), interpolation=transforms.InterpolationMode.BICUBIC)(stages_output)
         return torch.sum(pafs,dim=1)
 
 
