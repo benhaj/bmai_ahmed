@@ -53,13 +53,13 @@ class Baseline_1(nn.Module):
             nn.Linear(in_features=128,out_features=2)
         )    
 
-    def forward(self, x):
+    def forward(self, x,sexe,age):
         inference_output = self.inference_model(x)
         last_out = self.last(inference_output)
         return last_out
 
 
-### MODEL 2
+### MODEL 2 (use only mobilenet_v1)
 
 class Mobilenet_v1_part_of_OpenPose(nn.Module):
     def __init__(self, num_channels=128):
@@ -98,21 +98,9 @@ class Baseline_2(nn.Module):
         if freeze:
             for param in inference_model.parameters():
                 param.requires_grad = False
-        self.base = nn.Sequential(
-            #nn.Conv2d(in_channels=512, out_channels=64, kernel_size=1),
-            #nn.ReLU(),
-            #nn.MaxPool2d(kernel_size=2),
-            #nn.Conv2d(in_channels=64,out_channels=32,kernel_size=1),
-            #nn.ReLU(),
-            #nn.MaxPool2d(kernel_size=2),
-            #nn.Conv2d(in_channels=32,out_channels=1,kernel_size=1),
-            #nn.AdaptiveAvgPool2d(output_size=OUTPUT_SIZE)
-        )
 
         self.classifier = nn.Sequential(
-            #nn.Dropout(0.1),
             nn.Flatten(),
-            #nn.Linear(in_features=OUTPUT_SIZE[0]*OUTPUT_SIZE[1],out_features=256),
             nn.Linear(in_features=48*48,out_features=256),
             nn.ReLU(),
             nn.Linear(in_features=256,out_features=128),
@@ -341,9 +329,13 @@ class PoseEstimationWithMobileNet(nn.Module):
         return torch.sum(pafs,dim=1)
 
 
-def prepare_OpenPose_model(freeze=True,method_age_sex=0):
-    model = Mobilenet_v1_part_of_OpenPose()
-    load_state(model)
-    model = Baseline_1(model,freeze=True)
-    model.name = 'OpenPose_bmai'
+def prepare_OpenPose_model(name,freeze=True,method_age_sex=0):
+    if name=="mobilenet_v1_OpenPose":
+        model = Mobilenet_v1_part_of_OpenPose()
+        load_state(model)
+        model = Baseline_2(model,freeze=True)
+    else: # name=="PAFs_OpenPose":
+        model = PoseEstimationWithMobileNet()
+        load_state(model)
+        model = Baseline_1(model,freeze=True)
     return model

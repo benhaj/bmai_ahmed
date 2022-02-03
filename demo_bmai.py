@@ -19,7 +19,7 @@ def get_args_parser():
     parser = argparse.ArgumentParser(
         description='''Bmai human height and width estimation using mobilenet''', add_help=False)
     parser.add_argument('--model_name', default='mobilenet', type=str,
-                        help='model to use')
+                        help='model to use: Either mobilenet_v2, or mobilenet_v1_OpenPose or PAFs_OpenPose')
     parser.add_argument('--data_name', type=str, default='guinee', help='dataset to use (either "guinee" or "cambodge")')
     parser.add_argument('--SEED',type=int,default=0,help='SEED to perform validation')
     parser.add_argument('--img_size',type=int,default=256,help='size of images (either 256 or 386)')
@@ -50,7 +50,7 @@ def main(args):
     if args.model_name == 'mobilenet':
         model = Mobilenet_bmai(args.img_size,SEXE=SEXE, AGE=AGE, method_sex_age = args.method_sex_age)
     else:
-        model = prepare_OpenPose_model(freeze=True,method_age_sex=args.method_sex_age)
+        model = prepare_OpenPose_model(args.model_name,freeze=True,method_age_sex=args.method_sex_age)
     
     ## DATA
     dataset = prepare_dataset(args.data_name,args.img_size)
