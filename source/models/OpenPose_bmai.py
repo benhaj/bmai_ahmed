@@ -244,7 +244,7 @@ class InitialStage(nn.Module):
         pafs = self.pafs(trunk_features)
 #         return [heatmaps, pafs]
         print(pafs.shape)
-        return np.sum(pafs,axis=2)
+        return torch.sum(pafs,axis=2)
 
 class RefinementStageBlock(nn.Module):
     def __init__(self, in_channels, out_channels):
