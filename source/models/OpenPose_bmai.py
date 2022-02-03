@@ -242,7 +242,8 @@ class InitialStage(nn.Module):
         heatmaps = self.heatmaps(trunk_features)
         pafs = self.pafs(trunk_features)
 #         return [heatmaps, pafs]
-        return torch.sum(pafs,axis=1)
+#         return torch.sum(pafs,axis=1)
+        return pafs
 
 class RefinementStageBlock(nn.Module):
     def __init__(self, in_channels, out_channels):
@@ -283,7 +284,7 @@ class RefinementStage(nn.Module):
         heatmaps = self.heatmaps(trunk_features)
         pafs = self.pafs(trunk_features)
 #         return [heatmaps, pafs]
-        return torch.sum(pafs,dim=1)
+        return pafs
 
 
 class PoseEstimationWithMobileNet(nn.Module):
@@ -323,8 +324,9 @@ class PoseEstimationWithMobileNet(nn.Module):
 #                 refinement_stage(torch.cat([backbone_features, stages_output[-2], stages_output[-1]], dim=1)))
         
     ## select pafs, arrange channels and sum them
+        print(stages_output.shape)
         pafs = transforms.Resize((192, 192), interpolation=transforms.InterpolationMode.BICUBIC)(stages_output)
-        pafs=torch.unsqueeze(pafs, 1)
+#         pafs=torch.unsqueeze(pafs, 1)
         return pafs
 #         return torch.sum(pafs,dim=1)
 
