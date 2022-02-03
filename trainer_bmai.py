@@ -133,8 +133,6 @@ class BmaiTrainer:
                     print(message)
             epoch_loss = np.mean(batch_losses)
             
-            # log metrics inside your training loop to visualize model performance
-            wandb.log({'epoch':epoch,"epoch_loss": epoch_loss})
             
             print(f'for epoch {epoch} , average loss is {epoch_loss}')
             epoch_losses.append(epoch_loss)

@@ -57,9 +57,7 @@ def main(args):
         
     ## TRAINER:
     
-    #wandb initialization
-       run_name=f'{args.model_name}_Full_{args.data_name}_SEED{args.SEED}_{args.img_size}_SEXE_{SEXE}_AGE_{AGE}_method_{args.method_sex_age}_{args.epochs}_epochs_lr_{args.lr}'
-    wandb.init(project="new-sota-model",name=run_name)
+    run_name=f'{args.model_name}_Full_{args.data_name}_SEED{args.SEED}_{args.img_size}_SEXE_{SEXE}_AGE_{AGE}_method_{args.method_sex_age}_{args.epochs}_epochs_lr_{args.lr}'
 
     trainer = BmaiTrainer(model, dataset, seed=args.SEED, img_size=args.img_size, AGE=AGE, SEXE=SEXE, method_sex_age=args.method_sex_age , batch_size=args.batch_size, lr = args.lr, epochs=args.epochs, num_workers=args.num_workers)
     best_ , results,mean_training_loss = trainer.train()
