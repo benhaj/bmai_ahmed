@@ -326,10 +326,12 @@ class PoseEstimationWithMobileNet(nn.Module):
         
     ## select pafs, arrange channels and sum them
         print(stages_output.shape)
-        pafs = stages_output[-1]
+        pafs = torch.unsqueeze(stages_output, 1)
         print(pafs.shape)
-        pafs = transforms.Resize((192, 192), interpolation=transforms.InterpolationMode.BICUBIC)(stages_output)
-        return torch.sum(pafs,dim=1)
+        pafs = transforms.Resize((192, 192), interpolation=transforms.InterpolationMode.BICUBIC)(pafs)
+        print(pafs.shape)
+        return pafs
+#         return torch.sum(pafs,dim=1)
 
 
 def prepare_OpenPose_model(name,freeze=True,method_age_sex=0):
