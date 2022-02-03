@@ -5,7 +5,6 @@ from torch.utils.data import DataLoader, random_split, Dataset
 import torch.optim as optim
 from torch import nn
 import pandas as pd
-import wandb
 
 # start a new experiment
 
@@ -85,10 +84,6 @@ class BmaiTrainer:
         ## create optimizer
         optimizer = optim.Adam(model.parameters(),lr=self.lr)
         
-        # capture a dictionary of hyperparameters with config
-        wandb.config = {"learning_rate": self.lr, "epochs": self.epochs, "batch_size": self.batch_size}
-        # optional: track gradients
-        wandb.watch(model)
 
 
         results = pd.DataFrame(columns=['mean_height_rel_error','mean_weight_rel_error'])
@@ -204,7 +199,6 @@ class BmaiTrainer:
         print(f'mean_weight_rel_error = {mean_weight_rel_error}')
         results.loc[epoch_num] = [mean_height_rel_error,mean_weight_rel_error]
         
-        wandb.log({'epoch':epoch_num,'epoch_test_loss':average_loss, 'mean_height_rel_error':mean_height_rel_error, 'mean_weight_rel_error':mean_weight_rel_error})
         
         ## save predictions:
 
