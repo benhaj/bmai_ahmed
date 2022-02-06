@@ -154,6 +154,8 @@ class BmaiTrainer:
         y_true = []
         predictions = []
         predictions_branch = []
+        sexes=[]
+        ages=[]
         for batch_idx, data in enumerate(self.test_dataloader):
                 
 
@@ -177,10 +179,11 @@ class BmaiTrainer:
             ## Forward
             scores = model(imgs,age,sexe)
             
-            
+            sexes.append(sexe.detach().numpy() if self.device=='cpu' else sexe.cpu().detach().numpy())
+            ages.append(age.detach().numpy() if self.device=='cpu' else age.cpu().detach().numpy())
             y_true.append(target.detach().numpy() if self.device=='cpu' else target.cpu().detach().numpy())                
             predictions.append(scores.detach().numpy() if self.device=='cpu' else scores.cpu().detach().numpy())
-#             predictions_branch.append(mean_h_w.cpu().detach().numpy())
+            predictions_branch.append(mean_h_w.cpu().detach().numpy())
              
             # loss
             loss = self.loss_fn(scores,target).sum()
@@ -189,10 +192,11 @@ class BmaiTrainer:
                 
         average_loss = np.mean(batch_losses)
         print(f'Average test loss is {average_loss}')
-        
+        ages = np.vstack(ages)
+        sexes = np.vstack(sexes)
         y_true= np.vstack(y_true)
         predictions = np.vstack(predictions)
-#         predictions_branch = np.vstack(predictions_branch) #### JUST TO SEE BRANCH PREDICTIONS
+        predictions_branch = np.vstack(predictions_branch) #### JUST TO SEE BRANCH PREDICTIONS
         
         mean_height_rel_error,mean_weight_rel_error = calculate_mean_absolute_error_results(y_true,predictions)
         print(f'mean_height_rel_error = {mean_height_rel_error}')
@@ -206,9 +210,11 @@ class BmaiTrainer:
             min_ = (results.mean_height_rel_error.min(), mean_weight_rel_error.min())
             mean_ = np.mean(min_)
             if np.mean((mean_height_rel_error,mean_weight_rel_error))<= mean_:
-                torch.save(y_true,'results/y_true_guinee_mobilenet_v1_OpenPose.pt')
-                torch.save(predictions,f'results/predictions_guinee_mobilenet_v1_OpenPose.pt')
-#                 torch.save(predictions_branch,f'results/branch_cambodge_guinee_mobilenet_v2_with_branch.pt')
+                torch.save(y_true,'results/y_true.pt')
+                torch.save(sexes,'results/sexes_cambodge.pt')
+                torch.save(ages,'results/ages_cambodge.pt')
+                torch.save(predictions,f'results/main_predictions.pt')
+                torch.save(predictions_branch,f'results/branch_predictions.pt')
         
 
         return results,average_loss
